@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=gnu++1z
 
 CXX_DEFINES = -DdIDEDOUBLE
 
-CXX_INCLUDES = -I/home/romahoney/4yp/raisim_mpc/./include -I/home/romahoney/4yp/raisim_mpc/./libs/eigen3/include -I/home/romahoney/4yp/raisim_mpc/./libs/raisim/include -isystem /home/romahoney/4yp/raisim_mpc/libs/raisim/include 
+CXX_INCLUDES = -I/home/romahoney/4yp/raisim_mpc/./include -I/home/romahoney/4yp/raisim_mpc/./libs/eigen3/include -I/home/romahoney/4yp/raisim_mpc/./libs/osqp/include -I/home/romahoney/4yp/raisim_mpc/./libs/osqp/include/linux -I/home/romahoney/4yp/raisim_mpc/./libs/qpoases/include -I/home/romahoney/4yp/raisim_mpc/./libs/raisim/include -isystem /home/romahoney/4yp/raisim_mpc/libs/raisim/include 
 

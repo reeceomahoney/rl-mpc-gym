@@ -9,11 +9,12 @@
 #include "raisim/World.hpp"
 #include "raisim/RaisimServer.hpp"
 
-using namespace std;
-using namespace Eigen;
+using Eigen::Vector3d;
+using Eigen::Quaterniond;
+using Eigen::AngleAxisd;
 
 //Change this to a relative path
-string a1_urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf";
+std::string a1_urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf";
 VectorXd init_pos {{0.0, 0.0, 0.3, 1.0, 0.0, 0.0, 0.0, 0.0, 0.8, -1.6, 
     0.0, 0.8, -1.6, 0.0, 0.8, -1.6, 0.0, 0.8, -1.6}};
 
@@ -121,11 +122,10 @@ void A1::reset() {
     model->setGeneralizedCoordinate(init_pos);
     model->setGeneralizedVelocity(VectorXd::Zero(18));
     step_counter = 0;
-    //last_action = 0;
 };
 
 MatrixXd A1::getFootPositionsInBaseFrame() {
-    MatrixXd joint_angles = getJointAngles().reshaped<RowMajor>(4,3);
+    MatrixXd joint_angles = getJointAngles().reshaped<Eigen::StorageOptions::RowMajor>(4,3);
     MatrixXd foot_positions(4,3);
 
     for (int i = 0; i < 4; i++) {
@@ -244,7 +244,7 @@ double A1::getTimeSinceReset() {
 
 MatrixXd A1::computeJacobian(int leg_id) {
     auto joint_angles = getJointAngles()(
-        seq(3*leg_id, 3*(leg_id +1)));
+        Eigen::seq(3*leg_id, 3*(leg_id +1)));
     return analytical_leg_jacobian(joint_angles, leg_id);
 };
 
@@ -253,7 +253,7 @@ std::map<int,double> A1::mapContactForceToJointTorques(
         
         auto jv = computeJacobian(leg_id);
         VectorXd motor_torques_vec = jv.transpose()*contact_force;
-        map<int, double> motor_torques_map;
+        std::map<int, double> motor_torques_map;
 
         auto motor_ids = VectorXd::LinSpaced(3, 3*leg_id, 3*(leg_id+1));
         for (size_t i = 0; i < 3; i++) {

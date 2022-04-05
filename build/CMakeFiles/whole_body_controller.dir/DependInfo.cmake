@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/romahoney/4yp/raisim_mpc/main.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/main.cpp.o"
   "/home/romahoney/4yp/raisim_mpc/src/a1.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/a1.cpp.o"
+  "/home/romahoney/4yp/raisim_mpc/src/gait_generator.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -18,6 +19,9 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   ".././include"
   ".././libs/eigen3/include"
+  ".././libs/osqp/include"
+  ".././libs/osqp/include/linux"
+  ".././libs/qpoases/include"
   ".././libs/raisim/include"
   "../libs/raisim/include"
   )

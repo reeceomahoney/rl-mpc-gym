@@ -15,6 +15,7 @@
         "iostream": "cpp",
         "cmath": "cpp",
         "complex": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "dense": "cpp"
     }
 }

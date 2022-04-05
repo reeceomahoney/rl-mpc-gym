@@ -1,13 +1,15 @@
 #include "raisim/World.hpp"
 
-using namespace Eigen;
+using Eigen::VectorXd;
+using Eigen::MatrixXd;
+using Eigen::Matrix3d;
 
 VectorXd sliceVecDyn(const raisim::VecDyn vec, int start_idx, int end_idx);
 
 class A1 {
 
     double time_step;
-    //auto last_action; //TODO
+    VectorXd last_action;
     int num_legs = 4;
     int num_motors = 12;
     int step_counter = 0;
@@ -57,5 +59,4 @@ class A1 {
 
     void step(VectorXd actions);
     double getReward();
-
 };

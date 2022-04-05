@@ -10,6 +10,10 @@
 raisim/World.hpp
 .././include/raisim/World.hpp
 
+.././include/gait_generator.hpp
+a1.hpp
+.././include/a1.hpp
+
 .././libs/eigen3/include/Eigen/Cholesky
 Core
 .././libs/eigen3/include/Eigen/Core
@@ -1891,12 +1895,6 @@ tinystr.h
 .././libs/raisim/include/tinyxml_rai/tinystr.h
 
 /home/romahoney/4yp/raisim_mpc/main.cpp
-string
--
-list
--
-valarray
--
 a1.hpp
 /home/romahoney/4yp/raisim_mpc/a1.hpp
 Eigen/Dense
@@ -1923,4 +1921,8 @@ raisim/World.hpp
 /home/romahoney/4yp/raisim_mpc/src/raisim/World.hpp
 raisim/RaisimServer.hpp
 /home/romahoney/4yp/raisim_mpc/src/raisim/RaisimServer.hpp
+
+/home/romahoney/4yp/raisim_mpc/src/gait_generator.cpp
+gait_generator.hpp
+/home/romahoney/4yp/raisim_mpc/src/gait_generator.hpp
 

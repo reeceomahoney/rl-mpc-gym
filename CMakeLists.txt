@@ -8,9 +8,20 @@ set(raisim_DIR ./libs/raisim/lib/cmake/raisim)
 
 find_package(raisim CONFIG REQUIRED)
 
-include_directories(./include ./libs/eigen3/include)
+include_directories(
+    ./include 
+    ./libs/eigen3/include 
+    ./libs/osqp/include
+    ./libs/osqp/include/linux
+    ./libs/qpoases/include 
+)
 
-add_executable(${PROJECT_NAME} main.cpp ./src/a1.cpp)
+add_executable(${PROJECT_NAME} 
+    main.cpp 
+    ./src/a1.cpp
+    ./src/gait_generator.cpp
+    #./src/mpc_osqp.cc
+)
 
 #Link raisim
 target_link_libraries(${PROJECT_NAME} PUBLIC raisim::raisim pthread)

@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/whole_body_controller.dir/main.cpp.o"
   "CMakeFiles/whole_body_controller.dir/src/a1.cpp.o"
+  "CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o"
   "../bin/whole_body_controller.pdb"
   "../bin/whole_body_controller"
 )

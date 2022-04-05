@@ -6,7 +6,9 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/libs/raisim/include",
                 "${workspaceFolder}/libs/eigen3/include",
-                "${workspaceFolder}/include"
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/libs/osqp/include",
+                "${workspaceFolder}/libs/qpoases/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

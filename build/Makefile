@@ -204,6 +204,33 @@ src/gait_generator.cpp.s:
 	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.s
 .PHONY : src/gait_generator.cpp.s
 
+src/stance_controller.o: src/stance_controller.cpp.o
+
+.PHONY : src/stance_controller.o
+
+# target to build an object file
+src/stance_controller.cpp.o:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o
+.PHONY : src/stance_controller.cpp.o
+
+src/stance_controller.i: src/stance_controller.cpp.i
+
+.PHONY : src/stance_controller.i
+
+# target to preprocess a source file
+src/stance_controller.cpp.i:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.i
+.PHONY : src/stance_controller.cpp.i
+
+src/stance_controller.s: src/stance_controller.cpp.s
+
+.PHONY : src/stance_controller.s
+
+# target to generate assembly for a file
+src/stance_controller.cpp.s:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.s
+.PHONY : src/stance_controller.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -222,6 +249,9 @@ help:
 	@echo "... src/gait_generator.o"
 	@echo "... src/gait_generator.i"
 	@echo "... src/gait_generator.s"
+	@echo "... src/stance_controller.o"
+	@echo "... src/stance_controller.i"
+	@echo "... src/stance_controller.s"
 .PHONY : help
 
 

@@ -1,5 +1,6 @@
 #include "gait_generator.hpp"
 
+
 GaitGenerator::GaitGenerator(
     VectorXd _stance_duration, 
     VectorXd _duty_factor,

@@ -3,6 +3,7 @@
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
 using Eigen::Matrix3d;
+using Eigen::seq;
 
 VectorXd sliceVecDyn(const raisim::VecDyn vec, int start_idx, int end_idx);
 
@@ -34,6 +35,7 @@ class A1 {
     raisim::ArticulatedSystem* model;
 
     public:
+    A1();
     A1(raisim::ArticulatedSystem* _model);
 
     void reset();

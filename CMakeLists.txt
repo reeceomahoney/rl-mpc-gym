@@ -20,6 +20,7 @@ add_executable(${PROJECT_NAME}
     main.cpp 
     ./src/a1.cpp
     ./src/gait_generator.cpp
+    ./src/stance_controller.cpp
     #./src/mpc_osqp.cc
 )
 

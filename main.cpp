@@ -19,6 +19,16 @@ int main() {
     auto a1 = A1(model);
     world.integrate();
 
+    VectorXd x {{0,0,0}};
+    std::vector<double> vec(x.data(), x.data() + x.rows() * x.cols());
+
+    for (int i = 0; i < 3; i++)
+    {
+        std::cout<<vec[i]<<std::endl;
+    }
+    
+    
+
     //Main loop
     for (int i=0; i<1e7; i++) {
         //TODO: changing sleep to step in real time

@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/romahoney/4yp/raisim_mpc/main.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/main.cpp.o"
   "/home/romahoney/4yp/raisim_mpc/src/a1.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/a1.cpp.o"
   "/home/romahoney/4yp/raisim_mpc/src/gait_generator.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o"
+  "/home/romahoney/4yp/raisim_mpc/src/stance_controller.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

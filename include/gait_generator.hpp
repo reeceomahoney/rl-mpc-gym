@@ -1,4 +1,4 @@
-#include "a1.hpp"
+#include <Eigen/Dense>
 
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
@@ -20,6 +20,7 @@ class GaitGenerator {
 
     VectorXd initial_state_ratio_in_cycle;
 
+    GaitGenerator();
     GaitGenerator(
         VectorXd _stance_duration, 
         VectorXd _duty_factor,

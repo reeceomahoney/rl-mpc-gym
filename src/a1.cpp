@@ -243,8 +243,7 @@ double A1::getTimeSinceReset() {
 };
 
 MatrixXd A1::computeJacobian(int leg_id) {
-    auto joint_angles = getJointAngles()(
-        Eigen::seq(3*leg_id, 3*(leg_id +1)));
+    auto joint_angles = getJointAngles()(seq(3*leg_id, 3*(leg_id +1)));
     return analytical_leg_jacobian(joint_angles, leg_id);
 };
 

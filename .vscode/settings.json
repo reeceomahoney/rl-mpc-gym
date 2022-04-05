@@ -10,6 +10,11 @@
         "sstream": "cpp",
         "streambuf": "cpp",
         "type_traits": "cpp",
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "random": "cpp",
+        "iostream": "cpp",
+        "cmath": "cpp",
+        "complex": "cpp",
+        "tuple": "cpp"
     }
 }

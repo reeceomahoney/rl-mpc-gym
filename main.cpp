@@ -18,50 +18,25 @@ int main() {
     world.addGround();
     server.launchServer();
 
+    //Create a1 class
     string urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf";
-    auto a1 = world.addArticulatedSystem(urdf_path);
-    a1->setName("a1");
-
-    Eigen::VectorXd jointConfig(19), jointVelocityTarget(18);
-    Eigen::VectorXd jointState(18), jointVel(18), jointPgain(18), jointDgain(18);
-
-    jointPgain.setZero();
-    jointPgain.tail(12).setConstant(200.0);
-
-    jointDgain.setZero();
-    jointDgain.tail(12).setConstant(10.0);
-
-    jointVelocityTarget.setZero();
-    jointConfig << 0.0, 0.0, 0.3, 1.0, 0.0, 0.0, 0.0, 0.0, 0.8, -1.6, 
-        0.0, 0.8, -1.6, 0.0, 0.8, -1.6, 0.0, 0.8, -1.6;
-    jointVel << 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    auto model = world.addArticulatedSystem(urdf_path);
+    auto a1 = A1(model);
+    world.integrate();
     
-    a1->setState(jointConfig, jointVel);
-    a1->setControlMode(raisim::ControlMode::PD_PLUS_FEEDFORWARD_TORQUE);
-    a1->setPdGains(jointPgain, jointDgain);
-    a1->setPdTarget(jointConfig, jointVelocityTarget);
-    a1->setGeneralizedForce(Eigen::VectorXd::Zero(a1->getDOF()));
-    a1->setGeneralizedCoordinate(jointConfig);
+    VectorXd force {{0.1, 0.5, -30}};
+    auto x = a1.mapContactForceToJointTorques(0, force);
+    
+    for (auto &[k, v] : x) {
+        cout << "x[" << k << "] = (" << v  << ") " << endl;
+    };
 
-    auto x = a1->getBaseOrientation();
-    cout << x << endl;
-
-    for (int i=0; i<10000000; i++) {
+    //Main loop
+    for (int i=0; i<1e7; i++) {
+        //TODO: changing sleep to step in real time
         world.integrate();
-        std::this_thread::sleep_for(std::chrono::seconds(
-        size_t(time_step)));
+        this_thread::sleep_for(chrono::milliseconds(50));
     }
     
     server.killServer();
 }
-
-// int main() {
-//     std::cout << "A one-dimensional dynamic-size array:\n";
-//     Eigen::Matrix3d a {
-//             {0.07335, 0, 0},
-//             {0, 0, 0.25068},
-//             {0, 0, 0.25447}};
-//     // Eigen::VectorXd a = 100 * Eigen::VectorXd::Ones(3);
-//     std::cout << a << "\n\n";
-//     std::cout << b << "\n\n";
-// }

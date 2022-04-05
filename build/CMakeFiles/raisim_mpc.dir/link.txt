@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/raisim_mpc.dir/main.cpp.o  -o bin/raisim_mpc -Wl,-rpath,/home/romahoney/4yp/raisim_mpc/libs/raisim/lib ../libs/raisim/lib/libraisim.so -lpthread ../libs/raisim/lib/libraisimPng.so ../libs/raisim/lib/libraisimZ.so ../libs/raisim/lib/libraisimODE.so ../libs/raisim/lib/libraisimMine.so 

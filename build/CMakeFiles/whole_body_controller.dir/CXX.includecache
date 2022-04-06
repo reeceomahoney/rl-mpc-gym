@@ -12,7 +12,7 @@ raisim/World.hpp
 
 .././include/gait_generator.hpp
 Eigen/Dense
--
+.././include/Eigen/Dense
 
 .././include/mpc_osqp.hpp
 stdio.h
@@ -1526,8 +1526,6 @@ R_ext/Print.h
 types.h
 .././libs/osqp/include/types.h
 
-.././libs/osqp/include/linux/osqp_configure.h
-
 .././libs/osqp/include/osqp.h
 types.h
 .././libs/osqp/include/types.h
@@ -1535,6 +1533,8 @@ util.h
 .././libs/osqp/include/util.h
 cs.h
 .././libs/osqp/include/cs.h
+
+.././libs/osqp/include/osqp_configure.h
 
 .././libs/osqp/include/types.h
 glob_opts.h
@@ -2387,8 +2387,8 @@ tinystr.h
 .././libs/raisim/include/tinyxml_rai/tinystr.h
 
 /home/romahoney/4yp/raisim_mpc/main.cpp
-a1.hpp
-/home/romahoney/4yp/raisim_mpc/a1.hpp
+stance_controller.hpp
+/home/romahoney/4yp/raisim_mpc/stance_controller.hpp
 Eigen/Dense
 -
 raisim/World.hpp
@@ -2417,6 +2417,12 @@ raisim/RaisimServer.hpp
 /home/romahoney/4yp/raisim_mpc/src/gait_generator.cpp
 gait_generator.hpp
 /home/romahoney/4yp/raisim_mpc/src/gait_generator.hpp
+iostream
+-
+
+/home/romahoney/4yp/raisim_mpc/src/mpc_osqp.cc
+mpc_osqp.hpp
+/home/romahoney/4yp/raisim_mpc/src/mpc_osqp.hpp
 
 /home/romahoney/4yp/raisim_mpc/src/stance_controller.cpp
 stance_controller.hpp

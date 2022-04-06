@@ -30,6 +30,9 @@ StanceController::StanceController(
 
 std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights) {
     //Initialize solver
+    int planning_horizon_steps = 10;
+    double planning_timestep = 0.025;
+
     ConvexMpc convex_mpc(
       body_mass,
       body_inertia,
@@ -63,7 +66,7 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
         robot.getBaseRollPitchYawRate());
     
     VectorXd foot_tmp = robot.getFootPositionsInBaseFrame().reshaped<
-        Eigen::StorageOptions::RowMajor>(1,12);
+        Eigen::StorageOptions::RowMajor>();
     vector<double> foot_positions_base_frame = eigenToStlVec(foot_tmp);
 
     //Compute contact forces
@@ -73,24 +76,25 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
       desired_com_position, desired_com_velocity, desired_com_roll_pitch_yaw,
       desired_com_angular_velocity
     );
+    
     Eigen::VectorXd predicted_contact_forces = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         predicted_contact_forces_tmp.data(), predicted_contact_forces_tmp.size());
 
     //Convert forces to joint torques and format as a dictionary
     std::map<int,VectorXd> contact_forces;
     for (int i = 0; i < num_legs; i++) {
-        contact_forces[i]= predicted_contact_forces(seq(3*i,3*(1+1)));
+        contact_forces[i]= predicted_contact_forces(seq(3*i,3*i + 2));
     };
-                             
+
     std::map<int,double>action;
     for (auto &[leg_id, force] : contact_forces) {
         auto motor_torques = robot.mapContactForceToJointTorques(leg_id, force);
-
+        
         for (auto &[joint_id, torque] : motor_torques) {
             action[joint_id] = torque;
         };
     };
-
+    
     auto last_action = action;
     return action;
 };

@@ -153,32 +153,60 @@ CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o.provides: CMake
 CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o.provides.build: CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o
 
 
+CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o: CMakeFiles/whole_body_controller.dir/flags.make
+CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o: ../src/mpc_osqp.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/romahoney/4yp/raisim_mpc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o -c /home/romahoney/4yp/raisim_mpc/src/mpc_osqp.cc
+
+CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/romahoney/4yp/raisim_mpc/src/mpc_osqp.cc > CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.i
+
+CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/romahoney/4yp/raisim_mpc/src/mpc_osqp.cc -o CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.s
+
+CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o.requires:
+
+.PHONY : CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o.requires
+
+CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o.provides: CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o.requires
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o.provides.build
+.PHONY : CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o.provides
+
+CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o.provides.build: CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o
+
+
 # Object files for target whole_body_controller
 whole_body_controller_OBJECTS = \
 "CMakeFiles/whole_body_controller.dir/main.cpp.o" \
 "CMakeFiles/whole_body_controller.dir/src/a1.cpp.o" \
 "CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o" \
-"CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o"
+"CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o" \
+"CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o"
 
 # External object files for target whole_body_controller
 whole_body_controller_EXTERNAL_OBJECTS =
 
-../bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/main.cpp.o
-../bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/src/a1.cpp.o
-../bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o
-../bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o
-../bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/build.make
-../bin/whole_body_controller: ../libs/raisim/lib/libraisim.so
-../bin/whole_body_controller: ../libs/raisim/lib/libraisimPng.so
-../bin/whole_body_controller: ../libs/raisim/lib/libraisimZ.so
-../bin/whole_body_controller: ../libs/raisim/lib/libraisimODE.so
-../bin/whole_body_controller: ../libs/raisim/lib/libraisimMine.so
-../bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/romahoney/4yp/raisim_mpc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable ../bin/whole_body_controller"
+bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/main.cpp.o
+bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/src/a1.cpp.o
+bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o
+bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o
+bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o
+bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/build.make
+bin/whole_body_controller: ../libs/osqp/build/out/libosqp.so
+bin/whole_body_controller: ../libs/raisim/lib/libraisim.so
+bin/whole_body_controller: ../libs/qpoases/build/libs/libqpOASES.a
+bin/whole_body_controller: ../libs/raisim/lib/libraisimPng.so
+bin/whole_body_controller: ../libs/raisim/lib/libraisimZ.so
+bin/whole_body_controller: ../libs/raisim/lib/libraisimODE.so
+bin/whole_body_controller: ../libs/raisim/lib/libraisimMine.so
+bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/romahoney/4yp/raisim_mpc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable bin/whole_body_controller"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/whole_body_controller.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/whole_body_controller.dir/build: ../bin/whole_body_controller
+CMakeFiles/whole_body_controller.dir/build: bin/whole_body_controller
 
 .PHONY : CMakeFiles/whole_body_controller.dir/build
 
@@ -186,6 +214,7 @@ CMakeFiles/whole_body_controller.dir/requires: CMakeFiles/whole_body_controller.
 CMakeFiles/whole_body_controller.dir/requires: CMakeFiles/whole_body_controller.dir/src/a1.cpp.o.requires
 CMakeFiles/whole_body_controller.dir/requires: CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o.requires
 CMakeFiles/whole_body_controller.dir/requires: CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o.requires
+CMakeFiles/whole_body_controller.dir/requires: CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o.requires
 
 .PHONY : CMakeFiles/whole_body_controller.dir/requires
 

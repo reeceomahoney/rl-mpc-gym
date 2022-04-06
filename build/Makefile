@@ -204,6 +204,33 @@ src/gait_generator.cpp.s:
 	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.s
 .PHONY : src/gait_generator.cpp.s
 
+src/mpc_osqp.o: src/mpc_osqp.cc.o
+
+.PHONY : src/mpc_osqp.o
+
+# target to build an object file
+src/mpc_osqp.cc.o:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o
+.PHONY : src/mpc_osqp.cc.o
+
+src/mpc_osqp.i: src/mpc_osqp.cc.i
+
+.PHONY : src/mpc_osqp.i
+
+# target to preprocess a source file
+src/mpc_osqp.cc.i:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.i
+.PHONY : src/mpc_osqp.cc.i
+
+src/mpc_osqp.s: src/mpc_osqp.cc.s
+
+.PHONY : src/mpc_osqp.s
+
+# target to generate assembly for a file
+src/mpc_osqp.cc.s:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.s
+.PHONY : src/mpc_osqp.cc.s
+
 src/stance_controller.o: src/stance_controller.cpp.o
 
 .PHONY : src/stance_controller.o
@@ -249,6 +276,9 @@ help:
 	@echo "... src/gait_generator.o"
 	@echo "... src/gait_generator.i"
 	@echo "... src/gait_generator.s"
+	@echo "... src/mpc_osqp.o"
+	@echo "... src/mpc_osqp.i"
+	@echo "... src/mpc_osqp.s"
 	@echo "... src/stance_controller.o"
 	@echo "... src/stance_controller.i"
 	@echo "... src/stance_controller.s"

@@ -54,14 +54,22 @@ IF( NOT CMAKE_BUILD_TYPE )
         )
 ENDIF( NOT CMAKE_BUILD_TYPE )
 
-
+option(BUILD_SHARED_LIBS "If ON, build shared library instead of static" OFF)
 option(QPOASES_BUILD_EXAMPLES "Build examples." ON)
+option(QPOASES_AVOID_LA_NAMING_CONFLICTS "If ON, avoid to re-defined symbols that conflict with Blas/Lapack provided functions." OFF)
 
+IF(BUILD_SHARED_LIBS AND WIN32)
+    MESSAGE(FATAL_ERROR "Compiling qpOASES as a shared library in Windows is not supported.")
+ENDIF()
 
 ############################################################
 #################### compiler flags ########################
 ############################################################
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__NO_COPYRIGHT__")
+IF(QPOASES_AVOID_LA_NAMING_CONFLICTS)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__AVOID_LA_NAMING_CONFLICTS__")
+ENDIF()
+
 IF ( UNIX )
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wfloat-equal -Wshadow -DLINUX")
     SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3 -finline-functions")
@@ -104,7 +112,7 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 FILE(GLOB SRC src/*.cpp)
 
 # library
-ADD_LIBRARY(qpOASES STATIC ${SRC})
+ADD_LIBRARY(qpOASES ${SRC})
 INSTALL(TARGETS qpOASES
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib

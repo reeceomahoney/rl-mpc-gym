@@ -4,9 +4,6 @@
 
 using std::vector;
 
-int planning_horizon_steps = 10;
-double planning_timestep = 0.025;
-
 class StanceController {
     public:
     A1 robot;

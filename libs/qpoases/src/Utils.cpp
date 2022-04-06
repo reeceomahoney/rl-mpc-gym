@@ -254,7 +254,6 @@ returnValue myPrintf( const char* s )
  */
 returnValue printCopyrightNotice( )
 {
-  #if 0
 	#ifndef __SUPPRESSANYOUTPUT__
 		#ifndef __XPCTARGET__
 		#ifndef __DSPACE__
@@ -264,7 +263,6 @@ returnValue printCopyrightNotice( )
 		#endif /* __DSPACE__ */
 		#endif /* __XPCTARGET__ */
 	#endif /* __SUPPRESSANYOUTPUT__ */
-	#endif
 	return SUCCESSFUL_RETURN;
 }
 

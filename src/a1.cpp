@@ -243,7 +243,7 @@ double A1::getTimeSinceReset() {
 };
 
 MatrixXd A1::computeJacobian(int leg_id) {
-    auto joint_angles = getJointAngles()(seq(3*leg_id, 3*(leg_id +1)));
+    auto joint_angles = getJointAngles()(seq(3*leg_id, 3*leg_id + 2));
     return analytical_leg_jacobian(joint_angles, leg_id);
 };
 
@@ -253,7 +253,7 @@ std::map<int,double> A1::mapContactForceToJointTorques(
         auto jv = computeJacobian(leg_id);
         VectorXd motor_torques_vec = jv.transpose()*contact_force;
         std::map<int, double> motor_torques_map;
-
+        
         auto motor_ids = VectorXd::LinSpaced(3, 3*leg_id, 3*(leg_id+1));
         for (size_t i = 0; i < 3; i++) {
             motor_torques_map[motor_ids(i)] = motor_torques_vec[i];

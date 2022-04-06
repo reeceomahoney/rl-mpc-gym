@@ -10,6 +10,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "../CMakeLists.txt"
   "CMakeFiles/3.10.2/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.10.2/CMakeSystem.cmake"
+  "../libs/osqp/build/osqp-config.cmake"
+  "../libs/osqp/build/osqp-targets.cmake"
   "../libs/raisim/lib/cmake/raisim/raisim-targets-release.cmake"
   "../libs/raisim/lib/cmake/raisim/raisim-targets.cmake"
   "../libs/raisim/lib/cmake/raisim/raisimConfig-version.cmake"

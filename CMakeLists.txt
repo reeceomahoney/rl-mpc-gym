@@ -23,11 +23,13 @@ include_directories(
 
 #executables
 add_executable(${PROJECT_NAME} 
-    main.cpp 
+    whole_body_controller.cpp 
     ./src/a1.cpp
     ./src/gait_generator.cpp
     ./src/stance_controller.cpp
+    ./src/swing_controller.cpp
     ./src/mpc_osqp.cc
+    ./src/locomotion_controller.cpp
 )
 
 #Link external libraries

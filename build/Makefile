@@ -123,33 +123,6 @@ whole_body_controller/fast:
 	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/build
 .PHONY : whole_body_controller/fast
 
-main.o: main.cpp.o
-
-.PHONY : main.o
-
-# target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/main.cpp.o
-.PHONY : main.cpp.o
-
-main.i: main.cpp.i
-
-.PHONY : main.i
-
-# target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/main.cpp.i
-.PHONY : main.cpp.i
-
-main.s: main.cpp.s
-
-.PHONY : main.s
-
-# target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/main.cpp.s
-.PHONY : main.cpp.s
-
 src/a1.o: src/a1.cpp.o
 
 .PHONY : src/a1.o
@@ -203,6 +176,33 @@ src/gait_generator.s: src/gait_generator.cpp.s
 src/gait_generator.cpp.s:
 	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.s
 .PHONY : src/gait_generator.cpp.s
+
+src/locomotion_controller.o: src/locomotion_controller.cpp.o
+
+.PHONY : src/locomotion_controller.o
+
+# target to build an object file
+src/locomotion_controller.cpp.o:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/locomotion_controller.cpp.o
+.PHONY : src/locomotion_controller.cpp.o
+
+src/locomotion_controller.i: src/locomotion_controller.cpp.i
+
+.PHONY : src/locomotion_controller.i
+
+# target to preprocess a source file
+src/locomotion_controller.cpp.i:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/locomotion_controller.cpp.i
+.PHONY : src/locomotion_controller.cpp.i
+
+src/locomotion_controller.s: src/locomotion_controller.cpp.s
+
+.PHONY : src/locomotion_controller.s
+
+# target to generate assembly for a file
+src/locomotion_controller.cpp.s:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/locomotion_controller.cpp.s
+.PHONY : src/locomotion_controller.cpp.s
 
 src/mpc_osqp.o: src/mpc_osqp.cc.o
 
@@ -258,6 +258,60 @@ src/stance_controller.cpp.s:
 	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.s
 .PHONY : src/stance_controller.cpp.s
 
+src/swing_controller.o: src/swing_controller.cpp.o
+
+.PHONY : src/swing_controller.o
+
+# target to build an object file
+src/swing_controller.cpp.o:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/swing_controller.cpp.o
+.PHONY : src/swing_controller.cpp.o
+
+src/swing_controller.i: src/swing_controller.cpp.i
+
+.PHONY : src/swing_controller.i
+
+# target to preprocess a source file
+src/swing_controller.cpp.i:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/swing_controller.cpp.i
+.PHONY : src/swing_controller.cpp.i
+
+src/swing_controller.s: src/swing_controller.cpp.s
+
+.PHONY : src/swing_controller.s
+
+# target to generate assembly for a file
+src/swing_controller.cpp.s:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/swing_controller.cpp.s
+.PHONY : src/swing_controller.cpp.s
+
+whole_body_controller.o: whole_body_controller.cpp.o
+
+.PHONY : whole_body_controller.o
+
+# target to build an object file
+whole_body_controller.cpp.o:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o
+.PHONY : whole_body_controller.cpp.o
+
+whole_body_controller.i: whole_body_controller.cpp.i
+
+.PHONY : whole_body_controller.i
+
+# target to preprocess a source file
+whole_body_controller.cpp.i:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.i
+.PHONY : whole_body_controller.cpp.i
+
+whole_body_controller.s: whole_body_controller.cpp.s
+
+.PHONY : whole_body_controller.s
+
+# target to generate assembly for a file
+whole_body_controller.cpp.s:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.s
+.PHONY : whole_body_controller.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -267,21 +321,27 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... whole_body_controller"
 	@echo "... edit_cache"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
 	@echo "... src/a1.o"
 	@echo "... src/a1.i"
 	@echo "... src/a1.s"
 	@echo "... src/gait_generator.o"
 	@echo "... src/gait_generator.i"
 	@echo "... src/gait_generator.s"
+	@echo "... src/locomotion_controller.o"
+	@echo "... src/locomotion_controller.i"
+	@echo "... src/locomotion_controller.s"
 	@echo "... src/mpc_osqp.o"
 	@echo "... src/mpc_osqp.i"
 	@echo "... src/mpc_osqp.s"
 	@echo "... src/stance_controller.o"
 	@echo "... src/stance_controller.i"
 	@echo "... src/stance_controller.s"
+	@echo "... src/swing_controller.o"
+	@echo "... src/swing_controller.i"
+	@echo "... src/swing_controller.s"
+	@echo "... whole_body_controller.o"
+	@echo "... whole_body_controller.i"
+	@echo "... whole_body_controller.s"
 .PHONY : help
 
 

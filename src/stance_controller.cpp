@@ -15,8 +15,8 @@ vector<int> eigenToStlVec(VectorXi vec) {
 };
 
 StanceController::StanceController(
-    A1 _robot,
-    GaitGenerator _gait_generator,
+    A1* _robot,
+    GaitGenerator* _gait_generator,
     VectorXd _desired_speed,
     double _desired_twisting_speed,
     double _desired_body_height,
@@ -54,18 +54,18 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
     
     //Get current states
     vector<int> foot_contact_state = 
-        eigenToStlVec(gait_generator.desired_leg_state);
+        eigenToStlVec(gait_generator->desired_leg_state);
     
-    vector<double> com_position {{0, 0, robot.getComPosition()[2]}};
+    vector<double> com_position {{0, 0, robot->getComPosition()[2]}};
     vector<double> com_roll_pitch_yaw = eigenToStlVec(
-        robot.getBaseRollPitchYaw());
+        robot->getBaseRollPitchYaw());
     com_roll_pitch_yaw[2] = 0;
 
-    vector<double> com_velocity = eigenToStlVec(robot.getComVelocity());
+    vector<double> com_velocity = eigenToStlVec(robot->getComVelocity());
     vector<double> com_angular_velocity = eigenToStlVec(
-        robot.getBaseRollPitchYawRate());
+        robot->getBaseRollPitchYawRate());
     
-    VectorXd foot_tmp = robot.getFootPositionsInBaseFrame().reshaped<
+    VectorXd foot_tmp = robot->getFootPositionsInBaseFrame().reshaped<
         Eigen::StorageOptions::RowMajor>();
     vector<double> foot_positions_base_frame = eigenToStlVec(foot_tmp);
 
@@ -85,16 +85,19 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
     for (int i = 0; i < num_legs; i++) {
         contact_forces[i]= predicted_contact_forces(seq(3*i,3*i + 2));
     };
-
+    
     std::map<int,double>action;
     for (auto &[leg_id, force] : contact_forces) {
-        auto motor_torques = robot.mapContactForceToJointTorques(leg_id, force);
-        
+        auto motor_torques = robot->mapContactForceToJointTorques(leg_id, force);
+
         for (auto &[joint_id, torque] : motor_torques) {
-            action[joint_id] = torque;
+            //Only add non-zero values
+            if (torque) {
+                action[joint_id] = torque;
+            };
         };
     };
     
-    auto last_action = action;
+    last_action = action;
     return action;
 };

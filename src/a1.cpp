@@ -10,6 +10,7 @@
 #include "raisim/RaisimServer.hpp"
 
 using Eigen::Vector3d;
+using Eigen::Vector4d;
 using Eigen::Quaterniond;
 using Eigen::AngleAxisd;
 
@@ -18,8 +19,9 @@ std::string a1_urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf"
 VectorXd init_pos {{0.0, 0.0, 0.3, 1.0, 0.0, 0.0, 0.0, 0.0, 0.8, -1.6, 
     0.0, 0.8, -1.6, 0.0, 0.8, -1.6, 0.0, 0.8, -1.6}};
 
+//Helper function to slice stuff like model.getGeneralizedCoordinate()
 VectorXd sliceVecDyn(const raisim::VecDyn vec, int start_idx, int end_idx) {
-    //Function to slice stuff like model.getGeneralizedCoordinate()
+    
     VectorXd vec2(end_idx - start_idx);
     int j = 0;
 
@@ -29,6 +31,45 @@ VectorXd sliceVecDyn(const raisim::VecDyn vec, int start_idx, int end_idx) {
     };
     
     return vec2;
+};
+
+//Helper function to convert quaternions to euler angles
+Vector3d ToEulerAngles(Vector4d q) {
+    //q = w + xi + yj + zk
+    Vector3d angles;
+
+    // roll (x-axis rotation)
+    double sinr_cosp = 2 * (q[0] * q[1] + q[2] * q[3]);
+    double cosr_cosp = 1 - 2 * (q[1] * q[1] + q[2] * q[2]);
+    angles[0] = std::atan2(sinr_cosp, cosr_cosp);
+
+    // pitch (y-axis rotation)
+    double sinp = 2 * (q[0] * q[2] - q[3] * q[1]);
+    if (std::abs(sinp) >= 1)
+        angles[1] = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+    else
+        angles[1] = std::asin(sinp);
+
+    // yaw (z-axis rotation)
+    double siny_cosp = 2 * (q[0] * q[3] + q[1] * q[2]);
+    double cosy_cosp = 1 - 2 * (q[2] * q[2] + q[3] * q[3]);
+    angles[2] = std::atan2(siny_cosp, cosy_cosp);
+
+    return angles;
+};
+
+//Helper function to yaw to a R_z matrix
+Matrix3d ToRotationZ(double z) {
+    Matrix3d m;
+    m.setZero();
+    
+    m(0,0) = cos(z);
+    m(0,1) = -sin(z);
+    m(1,1) = cos(z);
+    m(1,0) = sin(z);
+    m(2,2) = 1;
+
+    return m;
 };
 
 VectorXd foot_position_in_hip_frame(VectorXd angles, int l_hip_sign) {
@@ -109,12 +150,14 @@ MatrixXd analytical_leg_jacobian(VectorXd leg_angles, int leg_id) {
 
 //A1 CLASS METHODS//
 
-A1::A1(raisim::ArticulatedSystem* _model) {
+A1::A1(raisim::ArticulatedSystem* _model, double _time_step) {
 
     //Initialize raisim model
     model = _model;
     model->setName("a1");
     model->setGeneralizedCoordinate(init_pos);
+
+    time_step = _time_step;
 };
 
 void A1::reset() {
@@ -150,29 +193,21 @@ VectorXd A1::getComPosition() {
 };
 
 VectorXd A1::getComVelocity() {
-    auto com_vel = frameTransformation(
-        sliceVecDyn(model->getGeneralizedVelocity(), 0, 3));
+    Vector3d com_vel;
+    auto lin_mom = model->getLinearMomentum();
+    for (int i = 0; i < 3; i++) {
+        com_vel[i] = lin_mom[i]/mpc_body_mass;
+    };
+    
+    com_vel = frameTransformation(com_vel);
     return com_vel;
 };
 
 VectorXd A1::frameTransformation(VectorXd vec) {
     auto base_orientation = sliceVecDyn(
         model->getGeneralizedCoordinate(), 3, 7);
-    
-    //Convert to euler angles
-    Quaterniond q;
-    q.x() = base_orientation[0];
-    q.y() = base_orientation[1];
-    q.z() = base_orientation[2];
-    q.w() = base_orientation[3];
-    auto euler = q.toRotationMatrix().eulerAngles(0,1,2);
-
-    //Create rotation matrix
-    Quaterniond q2;
-    q2 = AngleAxisd(0, Vector3d::UnitX())
-    * AngleAxisd(0, Vector3d::UnitY())
-    * AngleAxisd(-euler[2], Vector3d::UnitZ());
-    auto rot_mat = q2.toRotationMatrix();
+    auto euler = ToEulerAngles(base_orientation);
+    auto rot_mat = ToRotationZ(-euler[2]);
     
     VectorXd vec2 = rot_mat*vec;
     return vec2;
@@ -181,16 +216,7 @@ VectorXd A1::frameTransformation(VectorXd vec) {
 VectorXd A1::getBaseRollPitchYaw() {
     auto base_orientation = sliceVecDyn(
         model->getGeneralizedCoordinate(), 3, 7);
-    
-    //Convert to euler angles
-    Quaterniond q;
-    q.x() = base_orientation[0];
-    q.y() = base_orientation[1];
-    q.z() = base_orientation[2];
-    q.w() = base_orientation[3];
-    auto tmp = q.toRotationMatrix().eulerAngles(0,1,2);
-
-    auto rpy = frameTransformation(tmp);
+    auto rpy = frameTransformation(ToEulerAngles(base_orientation));
     return rpy;
 };
 
@@ -204,7 +230,7 @@ std::tuple<Eigen::VectorXd, Eigen::VectorXd>
     A1::getJointAnglesFromLocalFootPosition(int leg_id, 
     VectorXd foot_local_position) {
 
-    VectorXd joint_position_idxs = VectorXd::LinSpaced(3, 3*leg_id, 3*(leg_id + 1));
+    VectorXd joint_position_idxs = VectorXd::LinSpaced(3, 3*leg_id, 3*leg_id + 2);
     VectorXd joint_angles = foot_position_in_hip_frame_to_joint_angle(
         foot_local_position, pow(-1,leg_id + 1));
 
@@ -254,7 +280,7 @@ std::map<int,double> A1::mapContactForceToJointTorques(
         VectorXd motor_torques_vec = jv.transpose()*contact_force;
         std::map<int, double> motor_torques_map;
         
-        auto motor_ids = VectorXd::LinSpaced(3, 3*leg_id, 3*(leg_id+1));
+        auto motor_ids = VectorXd::LinSpaced(3, 3*leg_id, 3*leg_id + 2);
         for (size_t i = 0; i < 3; i++) {
             motor_torques_map[motor_ids(i)] = motor_torques_vec[i];
         };

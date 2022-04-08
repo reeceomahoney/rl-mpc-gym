@@ -4,11 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/romahoney/4yp/raisim_mpc/main.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/main.cpp.o"
   "/home/romahoney/4yp/raisim_mpc/src/a1.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/a1.cpp.o"
   "/home/romahoney/4yp/raisim_mpc/src/gait_generator.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o"
+  "/home/romahoney/4yp/raisim_mpc/src/locomotion_controller.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/locomotion_controller.cpp.o"
   "/home/romahoney/4yp/raisim_mpc/src/mpc_osqp.cc" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o"
   "/home/romahoney/4yp/raisim_mpc/src/stance_controller.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o"
+  "/home/romahoney/4yp/raisim_mpc/src/swing_controller.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/swing_controller.cpp.o"
+  "/home/romahoney/4yp/raisim_mpc/whole_body_controller.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

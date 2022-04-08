@@ -1,16 +1,23 @@
 #include "raisim/World.hpp"
 
 using Eigen::VectorXd;
+using Eigen::Vector3d;
 using Eigen::MatrixXd;
 using Eigen::Matrix3d;
 using Eigen::seq;
+using std::vector;
+using std::map;
+using std::string;
+using std::cout;
+using std::endl;
 
 VectorXd sliceVecDyn(const raisim::VecDyn vec, int start_idx, int end_idx);
 
 class A1 {
-
+    public:
     double time_step;
     VectorXd last_action;
+    VectorXd desired_speed;
     int num_legs = 4;
     int num_motors = 12;
     int step_counter = 0;
@@ -21,7 +28,7 @@ class A1 {
         {-0.183, 0.048, 0.0}};
 
     //Motor gains
-    VectorXd motor_kp = 100 * VectorXd::Ones(3);
+    VectorXd motor_kp = 100 * VectorXd::Ones(12);
     VectorXd motor_kd {{1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2}};
 
     //MPC parameters
@@ -34,9 +41,8 @@ class A1 {
 
     raisim::ArticulatedSystem* model;
 
-    public:
     A1();
-    A1(raisim::ArticulatedSystem* _model);
+    A1(raisim::ArticulatedSystem* _model, double _time_step);
 
     void reset();
 

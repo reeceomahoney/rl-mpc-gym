@@ -6,8 +6,8 @@ using std::vector;
 
 class StanceController {
     public:
-    A1 robot;
-    GaitGenerator gait_generator;
+    A1* robot;
+    GaitGenerator* gait_generator;
     VectorXd desired_speed;
     double desired_twisting_speed;
     double desired_body_height;
@@ -19,10 +19,12 @@ class StanceController {
     QPSolverName qp_solver = QPOASES;
     double tracking_error = 0;
 
+    map<int,double> last_action;
+
 
     StanceController(
-        A1 _robot,
-        GaitGenerator _gait_generator,
+        A1* _robot,
+        GaitGenerator* _gait_generator,
         VectorXd _desired_speed,
         double _desired_twisting_speed,
         double _desired_body_height,

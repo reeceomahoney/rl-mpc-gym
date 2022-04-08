@@ -10,10 +10,7 @@ GaitGenerator::GaitGenerator(
     :stance_duration(_stance_duration),
     duty_factor(_duty_factor),
     initial_leg_phase(_initial_leg_phase),
-    initial_leg_state(_initial_leg_state), 
-    swing_duration(VectorXd::Zero(4)),
-    initial_state_ratio_in_cycle(VectorXd::Zero(4)),
-    next_leg_state(VectorXi::Zero(4)) {
+    initial_leg_state(_initial_leg_state) {
 
     swing_duration = stance_duration.array() / 
         duty_factor.array() - stance_duration.array();
@@ -46,9 +43,9 @@ void GaitGenerator::update(double current_time) {
         double augmented_time = current_time + 
             initial_leg_phase[leg_id] * full_cycle_period;
         double phase_in_full_cycle = fmod(
-            augmented_time, full_cycle_period);
+            augmented_time, full_cycle_period) / full_cycle_period;
         double ratio = initial_state_ratio_in_cycle[leg_id];
-        
+
         if (phase_in_full_cycle < ratio) {
             desired_leg_state[leg_id] = initial_leg_state[leg_id];
             normalized_phase[leg_id] = phase_in_full_cycle / ratio;
@@ -60,6 +57,5 @@ void GaitGenerator::update(double current_time) {
         };
 
         leg_state[leg_id] = desired_leg_state[leg_id];
-
     };
 }

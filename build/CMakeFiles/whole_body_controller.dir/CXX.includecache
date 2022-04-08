@@ -14,6 +14,10 @@ raisim/World.hpp
 Eigen/Dense
 .././include/Eigen/Dense
 
+.././include/locomotion_controller.hpp
+swing_controller.hpp
+.././include/swing_controller.hpp
+
 .././include/mpc_osqp.hpp
 stdio.h
 -
@@ -51,6 +55,12 @@ gait_generator.hpp
 .././include/gait_generator.hpp
 mpc_osqp.hpp
 .././include/mpc_osqp.hpp
+
+.././include/swing_controller.hpp
+stance_controller.hpp
+.././include/stance_controller.hpp
+algorithm
+-
 
 .././libs/eigen3/include/Eigen/Cholesky
 Core
@@ -2386,16 +2396,6 @@ sstream
 tinystr.h
 .././libs/raisim/include/tinyxml_rai/tinystr.h
 
-/home/romahoney/4yp/raisim_mpc/main.cpp
-stance_controller.hpp
-/home/romahoney/4yp/raisim_mpc/stance_controller.hpp
-Eigen/Dense
--
-raisim/World.hpp
-/home/romahoney/4yp/raisim_mpc/raisim/World.hpp
-raisim/RaisimServer.hpp
-/home/romahoney/4yp/raisim_mpc/raisim/RaisimServer.hpp
-
 /home/romahoney/4yp/raisim_mpc/src/a1.cpp
 a1.hpp
 /home/romahoney/4yp/raisim_mpc/src/a1.hpp
@@ -2420,6 +2420,10 @@ gait_generator.hpp
 iostream
 -
 
+/home/romahoney/4yp/raisim_mpc/src/locomotion_controller.cpp
+locomotion_controller.hpp
+/home/romahoney/4yp/raisim_mpc/src/locomotion_controller.hpp
+
 /home/romahoney/4yp/raisim_mpc/src/mpc_osqp.cc
 mpc_osqp.hpp
 /home/romahoney/4yp/raisim_mpc/src/mpc_osqp.hpp
@@ -2427,4 +2431,20 @@ mpc_osqp.hpp
 /home/romahoney/4yp/raisim_mpc/src/stance_controller.cpp
 stance_controller.hpp
 /home/romahoney/4yp/raisim_mpc/src/stance_controller.hpp
+
+/home/romahoney/4yp/raisim_mpc/src/swing_controller.cpp
+swing_controller.hpp
+/home/romahoney/4yp/raisim_mpc/src/swing_controller.hpp
+
+/home/romahoney/4yp/raisim_mpc/whole_body_controller.cpp
+locomotion_controller.hpp
+/home/romahoney/4yp/raisim_mpc/locomotion_controller.hpp
+Eigen/Dense
+-
+raisim/World.hpp
+/home/romahoney/4yp/raisim_mpc/raisim/World.hpp
+raisim/RaisimServer.hpp
+/home/romahoney/4yp/raisim_mpc/raisim/RaisimServer.hpp
+time.h
+-
 

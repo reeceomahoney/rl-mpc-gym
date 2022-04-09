@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <stdio.h>
+#include <iostream>
 #include <Eigen/Dense>
 #include <Eigen/Core>
 #include <Eigen/Geometry>

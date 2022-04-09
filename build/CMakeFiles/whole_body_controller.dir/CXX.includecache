@@ -21,6 +21,8 @@ swing_controller.hpp
 .././include/mpc_osqp.hpp
 stdio.h
 -
+iostream
+-
 Eigen/Dense
 -
 Eigen/Core

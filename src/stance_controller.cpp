@@ -64,7 +64,7 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
     vector<double> com_velocity = eigenToStlVec(robot->getComVelocity());
     vector<double> com_angular_velocity = eigenToStlVec(
         robot->getBaseRollPitchYawRate());
-    
+
     VectorXd foot_tmp = robot->getFootPositionsInBaseFrame().reshaped<
         Eigen::StorageOptions::RowMajor>();
     vector<double> foot_positions_base_frame = eigenToStlVec(foot_tmp);

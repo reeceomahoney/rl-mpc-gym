@@ -2,6 +2,7 @@
 
 using Eigen::VectorXd;
 using Eigen::Vector3d;
+using Eigen::Vector4d;
 using Eigen::MatrixXd;
 using Eigen::Matrix3d;
 using Eigen::seq;
@@ -26,6 +27,11 @@ class A1 {
         {0.183, 0.048, 0.0},
         {-0.183, -0.048, 0.0},
         {-0.183, 0.048, 0.0}};
+    MatrixXd com_offset {
+        {-0.006, 0.001, -0.02},
+        {-0.006, 0.001, -0.02},
+        {-0.006, 0.001, -0.02},
+        {-0.006, 0.001, -0.02}};
 
     //Motor gains
     VectorXd motor_kp = 100 * VectorXd::Ones(12);
@@ -33,10 +39,6 @@ class A1 {
 
     //MPC parameters
     double mpc_body_mass = 12.454;
-    Matrix3d mpc_body_inertia {
-        {0.07335, 0, 0},
-        {0, 0.25068, 0},
-        {0, 0, 0.25447}};
     double mpc_body_height = 0.30;
 
     raisim::ArticulatedSystem* model;

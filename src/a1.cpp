@@ -9,14 +9,10 @@
 #include "raisim/World.hpp"
 #include "raisim/RaisimServer.hpp"
 
-using Eigen::Vector3d;
-using Eigen::Vector4d;
-using Eigen::Quaterniond;
-using Eigen::AngleAxisd;
 
 //Change this to a relative path
 std::string a1_urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf";
-VectorXd init_pos {{0.0, 0.0, 0.3, 1.0, 0.0, 0.0, 0.0, 0.0, 0.8, -1.6, 
+VectorXd init_pos {{0.0, 0.0, 0.3, 0.707, 0.0, 0.0, 0.707, 0.0, 0.8, -1.6, 
     0.0, 0.8, -1.6, 0.0, 0.8, -1.6, 0.0, 0.8, -1.6}};
 
 //Helper function to slice stuff like model.getGeneralizedCoordinate()
@@ -70,6 +66,22 @@ Matrix3d ToRotationZ(double z) {
     m(2,2) = 1;
 
     return m;
+};
+
+Vector3d toVec(raisim::Vec<3UL> vec) {
+    Vector3d vec2;
+    for (int i = 0; i < 3; i++) {
+        vec2[i] = vec[i];
+    };
+    return vec2;
+};
+
+Vector4d toVec(raisim::Vec<4> vec) {
+    Vector4d vec2;
+    for (int i = 0; i < 4; i++) {
+        vec2[i] = vec[i];
+    };
+    return vec2;
 };
 
 VectorXd foot_position_in_hip_frame(VectorXd angles, int l_hip_sign) {
@@ -158,6 +170,7 @@ A1::A1(raisim::ArticulatedSystem* _model, double _time_step) {
     model->setGeneralizedCoordinate(init_pos);
 
     time_step = _time_step;
+    hip_offsets += com_offset;
 };
 
 void A1::reset() {
@@ -183,47 +196,43 @@ MatrixXd A1::getFootPositionsInBaseFrame() {
 VectorXd A1::getComPosition() {
     model->getMassMatrix();
     auto tmp = model->getCompositeCOM()[0];
-
-    Vector3d com;
-    for (int i = 0; i < 3; i++) {
-        com[i] = tmp[i];
-    };
-    
+    auto com = toVec(tmp);
     return com;
 };
 
 VectorXd A1::getComVelocity() {
-    Vector3d com_vel;
-    auto lin_mom = model->getLinearMomentum();
-    for (int i = 0; i < 3; i++) {
-        com_vel[i] = lin_mom[i]/mpc_body_mass;
-    };
-    
+    raisim::Vec<3UL> vel;
+    model->getVelocity(0, vel);
+    auto com_vel = toVec(vel);
     com_vel = frameTransformation(com_vel);
     return com_vel;
 };
 
 VectorXd A1::frameTransformation(VectorXd vec) {
-    auto base_orientation = sliceVecDyn(
-        model->getGeneralizedCoordinate(), 3, 7);
+    raisim::Vec<4> base_o;
+    model->getBaseOrientation(base_o);
+    auto base_orientation = toVec(base_o);
     auto euler = ToEulerAngles(base_orientation);
-    auto rot_mat = ToRotationZ(-euler[2]);
-    
-    VectorXd vec2 = rot_mat*vec;
+    auto rot_mat = ToRotationZ(euler[2]);
+
+    VectorXd vec2 = rot_mat.transpose()*vec;
     return vec2;
 };
 
 VectorXd A1::getBaseRollPitchYaw() {
-    auto base_orientation = sliceVecDyn(
-        model->getGeneralizedCoordinate(), 3, 7);
-    auto rpy = frameTransformation(ToEulerAngles(base_orientation));
+    raisim::Vec<4> base_o;
+    model->getBaseOrientation(base_o);
+    auto base_orientation = toVec(base_o);
+    auto rpy = ToEulerAngles(base_orientation);
     return rpy;
 };
 
 VectorXd A1::getBaseRollPitchYawRate() {
-    auto rpy_rate = frameTransformation(
-        sliceVecDyn(model->getGeneralizedVelocity(), 3, 6));
-    return rpy_rate;
+    raisim::Vec<3UL> vel;
+    model->getAngularVelocity(0, vel);
+    auto ang_vel = toVec(vel);
+    ang_vel = frameTransformation(ang_vel);
+    return ang_vel;
 };
 
 std::tuple<Eigen::VectorXd, Eigen::VectorXd> 

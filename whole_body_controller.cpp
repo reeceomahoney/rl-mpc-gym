@@ -30,14 +30,14 @@ VectorXd interp1d(VectorXd time_points, MatrixXd speed_points, double t) {
 
 //Creates a speed profile
 VectorXd getCommand(double t) {
-    double vx = 1.5;
-    double vy = 0.75;
-    double wz = 2.0;
+    double vx = 0.8;
+    double vy = 0.5;
+    double wz = 1.5;
 
     VectorXd time_points {{0, 5, 10, 15, 20, 25, 30, 35, 40}};
-    MatrixXd speed_points {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, 
-        {0, vy, 0, 0}, {0, -vy, 0, 0}, {0, 0, 0, wz}, {0, 0, 0, -wz}, 
-        {0, 0, 0, 0}, {0, 0, 0, 0}};
+    MatrixXd speed_points {{0, 0, 0, 0}, {0, 0, 0, 0}, {vx, 0, 0, 0}, 
+        {-vx, 0, 0, 0}, {0, vy, 0, 0}, {0, -vy, 0, 0}, {0, 0, 0, wz}, 
+        {0, 0, 0, -wz}, {0, 0, 0, 0}};
     
     return interp1d(time_points, speed_points, t);
 };
@@ -85,7 +85,7 @@ int main() {
     A1 robot(model, time_step);
     A1* robot_ptr = &robot;
     
-    //Create controller
+    //Setp=up controller
     VectorXd desired_speed {{0, 0, 0}};
     double desired_twisting_speed = 0;
 
@@ -155,14 +155,14 @@ int main() {
             mpc_count = 0;
             mpc_step = true;
         };
-        
+
         //Apply action
         auto hybrid_action = controller.getAction(mpc_step, mpc_weights);
         robot.step(hybrid_action);
         world.integrate();
 
         current_time = robot.getTimeSinceReset();
-        std::this_thread::sleep_for(std::chrono::microseconds(50000));
+        std::this_thread::sleep_for(std::chrono::microseconds(500));
         if (fmod(current_time,5.) == 0.) {    
             cout<<"Time: "<<current_time<<"s"<<endl;
         };

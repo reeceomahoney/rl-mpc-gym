@@ -6,13 +6,13 @@ vector<double> eigenToStlVec(VectorXd vec) {
     std::vector<double> stl_vec(
         vec.data(), vec.data() + vec.rows() * vec.cols());
     return stl_vec;
-};
+}
 
 vector<int> eigenToStlVec(VectorXi vec) {
     std::vector<int> stl_vec(
         vec.data(), vec.data() + vec.rows() * vec.cols());
     return stl_vec;
-};
+}
 
 StanceController::StanceController(
     A1* _robot,
@@ -61,6 +61,7 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
         robot->getBaseRollPitchYaw());
     com_roll_pitch_yaw[2] = 0;
 
+    
     vector<double> com_velocity = eigenToStlVec(robot->getComVelocity());
     vector<double> com_angular_velocity = eigenToStlVec(
         robot->getBaseRollPitchYawRate());
@@ -80,12 +81,22 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
     Eigen::VectorXd predicted_contact_forces = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         predicted_contact_forces_tmp.data(), predicted_contact_forces_tmp.size());
 
+    if (robot->getTimeSinceReset() == 0) {
+        cout<<predicted_contact_forces(seq(0,11))<<endl;
+    }
+
     //Convert forces to joint torques and format as a dictionary
     std::map<int,VectorXd> contact_forces;
     for (int i = 0; i < num_legs; i++) {
         contact_forces[i]= predicted_contact_forces(seq(3*i,3*i + 2));
-    };
-    
+    }
+
+    // int leg = 0;
+    // times.push_back(robot->getTimeSinceReset());
+    // solvesx.push_back(contact_forces[leg][0]);
+    // solvesy.push_back(contact_forces[leg][1]);
+    // solvesz.push_back(contact_forces[leg][2]);
+
     std::map<int,double>action;
     for (auto &[leg_id, force] : contact_forces) {
         auto motor_torques = robot->mapContactForceToJointTorques(leg_id, force);
@@ -94,10 +105,10 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
             //Only add non-zero values
             if (torque) {
                 action[joint_id] = torque;
-            };
-        };
-    };
+            }
+        }
+    }
     
     last_action = action;
     return action;
-};
+}

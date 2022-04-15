@@ -25,6 +25,8 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   ".././libs/eigen3/include"
   ".././libs/osqp/include"
   ".././libs/qpoases/include"
+  ".././libs/matplotlib-cpp"
+  "/home/romahoney/miniconda3/envs/robots_3.7/include/python3.7m"
   ".././libs/raisim/include"
   "../libs/osqp/include"
   "../libs/raisim/include"

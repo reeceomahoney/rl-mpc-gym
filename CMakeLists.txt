@@ -19,6 +19,8 @@ include_directories(
     ./libs/eigen3/include 
     ./libs/osqp/include
     ./libs/qpoases/include 
+    ./libs/matplotlib-cpp 
+    /home/romahoney/miniconda3/envs/robots_3.7/include/python3.7m
 )
 
 #executables
@@ -36,6 +38,8 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
     PRIVATE osqp::osqp
     PUBLIC raisim::raisim pthread 
-    ${CMAKE_SOURCE_DIR}/libs/qpoases/build/libs/libqpOASES.a)
+    ${CMAKE_SOURCE_DIR}/libs/qpoases/build/libs/libqpOASES.a 
+    /home/romahoney/miniconda3/envs/robots_3.7/lib/libpython3.7m.so
+)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ./libs/raisim/include)

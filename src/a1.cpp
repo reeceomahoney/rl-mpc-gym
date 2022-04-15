@@ -12,7 +12,7 @@
 
 //Change this to a relative path
 std::string a1_urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf";
-VectorXd init_pos {{0.0, 0.0, 0.3, 0.707, 0.0, 0.0, 0.707, 0.0, 0.8, -1.6, 
+VectorXd init_pos {{0.0, 0.0, 0.3, 1.0, 0.0, 0.0, 0.0, 0.0, 0.8, -1.6, 
     0.0, 0.8, -1.6, 0.0, 0.8, -1.6, 0.0, 0.8, -1.6}};
 
 //Helper function to slice stuff like model.getGeneralizedCoordinate()
@@ -24,10 +24,10 @@ VectorXd sliceVecDyn(const raisim::VecDyn vec, int start_idx, int end_idx) {
     for (int i = start_idx; i < end_idx; i++) {   
         vec2(j) = vec[i];
         j++;
-    };
+    }
     
     return vec2;
-};
+}
 
 //Helper function to convert quaternions to euler angles
 Vector3d ToEulerAngles(Vector4d q) {
@@ -52,7 +52,7 @@ Vector3d ToEulerAngles(Vector4d q) {
     angles[2] = std::atan2(siny_cosp, cosy_cosp);
 
     return angles;
-};
+}
 
 //Helper function to yaw to a R_z matrix
 Matrix3d ToRotationZ(double z) {
@@ -66,23 +66,23 @@ Matrix3d ToRotationZ(double z) {
     m(2,2) = 1;
 
     return m;
-};
+}
 
 Vector3d toVec(raisim::Vec<3UL> vec) {
     Vector3d vec2;
     for (int i = 0; i < 3; i++) {
         vec2[i] = vec[i];
-    };
+    }
     return vec2;
-};
+}
 
 Vector4d toVec(raisim::Vec<4> vec) {
     Vector4d vec2;
     for (int i = 0; i < 4; i++) {
         vec2[i] = vec[i];
-    };
+    }
     return vec2;
-};
+}
 
 VectorXd foot_position_in_hip_frame(VectorXd angles, int l_hip_sign) {
     double theta_ab = angles[0];
@@ -107,7 +107,7 @@ VectorXd foot_position_in_hip_frame(VectorXd angles, int l_hip_sign) {
 
     VectorXd foot_pos {{off_x, off_y, off_z}};
     return foot_pos;
-};
+}
 
 VectorXd foot_position_in_hip_frame_to_joint_angle(VectorXd foot_position, int l_hip_sign) {
     double l_up = 0.2;
@@ -129,36 +129,36 @@ VectorXd foot_position_in_hip_frame_to_joint_angle(VectorXd foot_position, int l
 
     VectorXd foot_pos {{theta_ab, theta_hip, theta_knee}};
     return foot_pos;
-};
+}
 
 MatrixXd analytical_leg_jacobian(VectorXd leg_angles, int leg_id) {
-  double l_up = 0.2;
-  double l_low = 0.2;
-  double l_hip = 0.08505 * pow(-1,leg_id + 1);
+    double l_up = 0.2;
+    double l_low = 0.2;
+    double l_hip = 0.08505 * pow(-1,leg_id + 1);
 
-  double t1 = leg_angles[0];
-  double t2 = leg_angles[1];
-  double t3 = leg_angles[2];
+    double t1 = leg_angles[0];
+    double t2 = leg_angles[1];
+    double t3 = leg_angles[2];
 
-  double l_eff = sqrt(pow(l_up,2) + pow(l_low,2) + 2 * l_up * l_low * cos(t3));
-  double t_eff = t2 + t3 / 2;
-  Matrix3d J;
+    double l_eff = sqrt(pow(l_up,2) + pow(l_low,2) + 2 * l_up * l_low * cos(t3));
+    double t_eff = t2 + t3 / 2;
+    Matrix3d J;
 
-  J(0,0) = 0;
-  J(0,1) = -l_eff * cos(t_eff);
-  J(0,2) = l_low * l_up * sin(t3) * sin(t_eff) / l_eff - l_eff * cos(
-      t_eff) / 2;
-  J(1,0) = -l_hip * sin(t1) + l_eff * cos(t1) * cos(t_eff);
-  J(1,1) = -l_eff * sin(t1) * sin(t_eff);
-  J(1,2) = -l_low * l_up * sin(t1) * sin(t3) * cos(
-      t_eff) / l_eff - l_eff * sin(t1) * sin(t_eff) / 2;
-  J(2,0) = l_hip * cos(t1) + l_eff * sin(t1) * cos(t_eff);
-  J(2,1) = l_eff * sin(t_eff) * cos(t1);
-  J(2,2) = l_low * l_up * sin(t3) * cos(t1) * cos(
-      t_eff) / l_eff + l_eff * sin(t_eff) * cos(t1) / 2;
+    J(0,0) = 0;
+    J(0,1) = -l_eff * cos(t_eff);
+    J(0,2) = l_low * l_up * sin(t3) * sin(t_eff) / l_eff - l_eff * cos(
+        t_eff) / 2;
+    J(1,0) = -l_hip * sin(t1) + l_eff * cos(t1) * cos(t_eff);
+    J(1,1) = -l_eff * sin(t1) * sin(t_eff);
+    J(1,2) = -l_low * l_up * sin(t1) * sin(t3) * cos(
+        t_eff) / l_eff - l_eff * sin(t1) * sin(t_eff) / 2;
+    J(2,0) = l_hip * cos(t1) + l_eff * sin(t1) * cos(t_eff);
+    J(2,1) = l_eff * sin(t_eff) * cos(t1);
+    J(2,2) = l_low * l_up * sin(t3) * cos(t1) * cos(
+        t_eff) / l_eff + l_eff * sin(t_eff) * cos(t1) / 2;
 
   return J;
-};
+}
 
 //A1 CLASS METHODS//
 
@@ -170,15 +170,15 @@ A1::A1(raisim::ArticulatedSystem* _model, double _time_step) {
     model->setGeneralizedCoordinate(init_pos);
 
     time_step = _time_step;
-    hip_offsets += com_offset;
-};
+    hip_offsets -= com_offset;
+}
 
 void A1::reset() {
     //TODO: Randomize initial states
     model->setGeneralizedCoordinate(init_pos);
     model->setGeneralizedVelocity(VectorXd::Zero(18));
     step_counter = 0;
-};
+}
 
 MatrixXd A1::getFootPositionsInBaseFrame() {
     MatrixXd joint_angles = getJointAngles().reshaped<Eigen::StorageOptions::RowMajor>(4,3);
@@ -188,17 +188,17 @@ MatrixXd A1::getFootPositionsInBaseFrame() {
         VectorXd tmp(joint_angles.row(i));
         foot_positions.row(i) = foot_position_in_hip_frame(
             tmp, pow(-1,i + 1));
-    };
+    }
 
     return foot_positions + hip_offsets;
-};
+}
 
 VectorXd A1::getComPosition() {
     model->getMassMatrix();
     auto tmp = model->getCompositeCOM()[0];
     auto com = toVec(tmp);
     return com;
-};
+}
 
 VectorXd A1::getComVelocity() {
     raisim::Vec<3UL> vel;
@@ -206,7 +206,7 @@ VectorXd A1::getComVelocity() {
     auto com_vel = toVec(vel);
     com_vel = frameTransformation(com_vel);
     return com_vel;
-};
+}
 
 VectorXd A1::frameTransformation(VectorXd vec) {
     raisim::Vec<4> base_o;
@@ -217,7 +217,7 @@ VectorXd A1::frameTransformation(VectorXd vec) {
 
     VectorXd vec2 = rot_mat.transpose()*vec;
     return vec2;
-};
+}
 
 VectorXd A1::getBaseRollPitchYaw() {
     raisim::Vec<4> base_o;
@@ -225,7 +225,7 @@ VectorXd A1::getBaseRollPitchYaw() {
     auto base_orientation = toVec(base_o);
     auto rpy = ToEulerAngles(base_orientation);
     return rpy;
-};
+}
 
 VectorXd A1::getBaseRollPitchYawRate() {
     raisim::Vec<3UL> vel;
@@ -233,7 +233,7 @@ VectorXd A1::getBaseRollPitchYawRate() {
     auto ang_vel = toVec(vel);
     ang_vel = frameTransformation(ang_vel);
     return ang_vel;
-};
+}
 
 std::tuple<Eigen::VectorXd, Eigen::VectorXd> 
     A1::getJointAnglesFromLocalFootPosition(int leg_id, 
@@ -244,17 +244,17 @@ std::tuple<Eigen::VectorXd, Eigen::VectorXd>
         foot_local_position, pow(-1,leg_id + 1));
 
     return {joint_position_idxs, joint_angles};
-};
+}
 
 VectorXd A1::getJointAngles() {
     auto joint_angles = sliceVecDyn(model->getGeneralizedCoordinate(), 7, 19);
     return joint_angles;
-};
+}
 
 VectorXd A1::getJointVelocities() {
     auto joint_vels = sliceVecDyn(model->getGeneralizedVelocity(), 6, 18);
     return joint_vels;
-};
+}
 
 VectorXd A1::getObservation() {
     auto com_position = getComPosition();
@@ -271,16 +271,16 @@ VectorXd A1::getObservation() {
     joint_velocities;
     
     return obs;
-};
+}
 
 double A1::getTimeSinceReset() {
     return step_counter * time_step;
-};
+}
 
 MatrixXd A1::computeJacobian(int leg_id) {
     auto joint_angles = getJointAngles()(seq(3*leg_id, 3*leg_id + 2));
     return analytical_leg_jacobian(joint_angles, leg_id);
-};
+}
 
 std::map<int,double> A1::mapContactForceToJointTorques(
     int leg_id, VectorXd contact_force) {
@@ -292,20 +292,20 @@ std::map<int,double> A1::mapContactForceToJointTorques(
         auto motor_ids = VectorXd::LinSpaced(3, 3*leg_id, 3*leg_id + 2);
         for (size_t i = 0; i < 3; i++) {
             motor_torques_map[motor_ids(i)] = motor_torques_vec[i];
-        };
+        }
         
         return motor_torques_map;
-};
+}
 
 void A1::step(VectorXd actions) {
     VectorXd forces = VectorXd::Zero(18);
     forces.tail(12) = actions;
     model->setGeneralizedForce(forces);
     step_counter++;
-};
+}
 
 double A1::getReward() {
     auto com_velocity = getComVelocity();
     auto rpy_rate = getBaseRollPitchYaw();
     //TODO
-};
+}

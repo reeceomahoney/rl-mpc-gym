@@ -90,7 +90,7 @@ map<int,double> SwingController::getAction() {
         VectorXd hip_offset = hip_positions.row(leg_id);
         VectorXd twisting_vector {{-hip_offset[1], hip_offset[0], 0}};
         VectorXd hip_horizontal_velocity = 
-            com_velocity - rpy_rate[2] * twisting_vector;
+            com_velocity + rpy_rate[2] * twisting_vector;
         
         VectorXd target_hip_horizontal_velocity = (
             desired_speed + desired_twisting_speed * twisting_vector);

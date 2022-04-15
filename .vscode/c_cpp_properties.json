@@ -8,7 +8,8 @@
                 "${workspaceFolder}/libs/eigen3/include",
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/libs/osqp/include",
-                "${workspaceFolder}/libs/qpoases/include"
+                "${workspaceFolder}/libs/qpoases/include",
+                "/home/romahoney/miniconda3/envs/robots_3.7/include/python3.7m"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

@@ -4,13 +4,15 @@
 #include "raisim/RaisimServer.hpp"
 
 #include <time.h>
+#include "matplotlibcpp.h"
 
+namespace plt = matplotlibcpp;
 
 vector<double> mpc_weights {1, 1, 0, 0, 0, 50, 0, 0, 1, 0.2, 0.2, 0.1, 0};
 
 double sim_freq = 1000;
 int mpc_freq = 50;
-int max_time = 40;
+int max_time = 1;
 
 //Helper function to interpolate velocity commands
 VectorXd interp1d(VectorXd time_points, MatrixXd speed_points, double t) {
@@ -35,9 +37,9 @@ VectorXd getCommand(double t) {
     double wz = 1.5;
 
     VectorXd time_points {{0, 5, 10, 15, 20, 25, 30, 35, 40}};
-    MatrixXd speed_points {{0, 0, 0, 0}, {0, 0, 0, 0}, {vx, 0, 0, 0}, 
-        {-vx, 0, 0, 0}, {0, vy, 0, 0}, {0, -vy, 0, 0}, {0, 0, 0, wz}, 
-        {0, 0, 0, -wz}, {0, 0, 0, 0}};
+    MatrixXd speed_points {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, 
+        {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, 
+        {0, 0, 0, 0}, {0, 0, 0, 0}};
     
     return interp1d(time_points, speed_points, t);
 };
@@ -80,17 +82,17 @@ int main() {
     server.launchServer();
 
     //Create a1 class
-    std::string urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf";
+    string urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf";
     auto model = world.addArticulatedSystem(urdf_path);
     A1 robot(model, time_step);
     A1* robot_ptr = &robot;
     
-    //Setp=up controller
+    //Setup controller
     VectorXd desired_speed {{0, 0, 0}};
     double desired_twisting_speed = 0;
 
     //Modes: standing, trotting
-    GaitProfile gait_profile("trotting");
+    GaitProfile gait_profile("standing");
 
     GaitGenerator gait_generator(
         gait_profile.stance_duration, 
@@ -155,17 +157,24 @@ int main() {
             mpc_count = 0;
             mpc_step = true;
         };
-
+        
         //Apply action
         auto hybrid_action = controller.getAction(mpc_step, mpc_weights);
         robot.step(hybrid_action);
         world.integrate();
 
         current_time = robot.getTimeSinceReset();
-        std::this_thread::sleep_for(std::chrono::microseconds(500));
+        std::this_thread::sleep_for(std::chrono::microseconds(5000));
         if (fmod(current_time,5.) == 0.) {    
             cout<<"Time: "<<current_time<<"s"<<endl;
         };
     };
     server.killServer();
+
+    // auto times = controller.stance_controller->times;
+    // plt::named_plot("x", times, controller.stance_controller->solvesx);
+    // plt::named_plot("y", times, controller.stance_controller->solvesy);
+    // plt::named_plot("z", times, controller.stance_controller->solvesz);
+    // plt::legend();
+    // plt::show();
 };

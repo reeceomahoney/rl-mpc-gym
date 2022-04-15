@@ -249,6 +249,7 @@ bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/build.make
 bin/whole_body_controller: ../libs/osqp/build/out/libosqp.so
 bin/whole_body_controller: ../libs/raisim/lib/libraisim.so
 bin/whole_body_controller: ../libs/qpoases/build/libs/libqpOASES.a
+bin/whole_body_controller: /home/romahoney/miniconda3/envs/robots_3.7/lib/libpython3.7m.so
 bin/whole_body_controller: ../libs/raisim/lib/libraisimPng.so
 bin/whole_body_controller: ../libs/raisim/lib/libraisimZ.so
 bin/whole_body_controller: ../libs/raisim/lib/libraisimODE.so

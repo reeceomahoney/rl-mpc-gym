@@ -133,6 +133,8 @@ public:
     // For each foot contact force we use 4-dim cone approximation + 1 for z.
     static constexpr int kConstraintDim = 5;
 
+    ConvexMpc();
+
     ConvexMpc(double mass, const std::vector<double>& inertia, int num_legs,
         int planning_horizon, double timestep,
         const std::vector<double>& qp_weights, double alpha = 1e-5, 

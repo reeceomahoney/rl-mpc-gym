@@ -11,6 +11,8 @@ using std::map;
 using std::string;
 using std::cout;
 using std::endl;
+using raisim::Vec;
+using raisim::Mat;
 
 VectorXd sliceVecDyn(const raisim::VecDyn vec, int start_idx, int end_idx);
 
@@ -39,7 +41,7 @@ class A1 {
 
     //MPC parameters
     double mpc_body_mass = 12.454;
-    double mpc_body_height = 0.30;
+    double mpc_body_height = 0.28;
 
     raisim::ArticulatedSystem* model;
 

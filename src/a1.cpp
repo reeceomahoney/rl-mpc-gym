@@ -68,22 +68,6 @@ Matrix3d ToRotationZ(double z) {
     return m;
 }
 
-Vector3d toVec(raisim::Vec<3UL> vec) {
-    Vector3d vec2;
-    for (int i = 0; i < 3; i++) {
-        vec2[i] = vec[i];
-    }
-    return vec2;
-}
-
-Vector4d toVec(raisim::Vec<4> vec) {
-    Vector4d vec2;
-    for (int i = 0; i < 4; i++) {
-        vec2[i] = vec[i];
-    }
-    return vec2;
-}
-
 VectorXd foot_position_in_hip_frame(VectorXd angles, int l_hip_sign) {
     double theta_ab = angles[0];
     double theta_hip = angles[1];
@@ -193,46 +177,34 @@ MatrixXd A1::getFootPositionsInBaseFrame() {
     return foot_positions + hip_offsets;
 }
 
+VectorXd A1::frameTransformation(VectorXd vec) {
+    Vec<4> base_o;
+    model->getBaseOrientation(base_o);
+    VectorXd euler = ToEulerAngles(base_o.e());
+    return ToRotationZ(euler[2]).transpose()*vec;
+}
+
 VectorXd A1::getComPosition() {
     model->getMassMatrix();
-    auto tmp = model->getCompositeCOM()[0];
-    auto com = toVec(tmp);
-    return com;
+    return model->getCompositeCOM()[0].e();
 }
 
 VectorXd A1::getComVelocity() {
-    raisim::Vec<3UL> vel;
+    Vec<3UL> vel;
     model->getVelocity(0, vel);
-    auto com_vel = toVec(vel);
-    com_vel = frameTransformation(com_vel);
-    return com_vel;
-}
-
-VectorXd A1::frameTransformation(VectorXd vec) {
-    raisim::Vec<4> base_o;
-    model->getBaseOrientation(base_o);
-    auto base_orientation = toVec(base_o);
-    auto euler = ToEulerAngles(base_orientation);
-    auto rot_mat = ToRotationZ(euler[2]);
-
-    VectorXd vec2 = rot_mat.transpose()*vec;
-    return vec2;
+    return frameTransformation(vel.e());
 }
 
 VectorXd A1::getBaseRollPitchYaw() {
-    raisim::Vec<4> base_o;
+    Vec<4> base_o;
     model->getBaseOrientation(base_o);
-    auto base_orientation = toVec(base_o);
-    auto rpy = ToEulerAngles(base_orientation);
-    return rpy;
+    return ToEulerAngles(base_o.e());
 }
 
 VectorXd A1::getBaseRollPitchYawRate() {
-    raisim::Vec<3UL> vel;
+    Vec<3UL> vel;
     model->getAngularVelocity(0, vel);
-    auto ang_vel = toVec(vel);
-    ang_vel = frameTransformation(ang_vel);
-    return ang_vel;
+    return frameTransformation(vel.e());
 }
 
 std::tuple<Eigen::VectorXd, Eigen::VectorXd> 
@@ -247,13 +219,11 @@ std::tuple<Eigen::VectorXd, Eigen::VectorXd>
 }
 
 VectorXd A1::getJointAngles() {
-    auto joint_angles = sliceVecDyn(model->getGeneralizedCoordinate(), 7, 19);
-    return joint_angles;
+    return sliceVecDyn(model->getGeneralizedCoordinate(), 7, 19);
 }
 
 VectorXd A1::getJointVelocities() {
-    auto joint_vels = sliceVecDyn(model->getGeneralizedVelocity(), 6, 18);
-    return joint_vels;
+    return sliceVecDyn(model->getGeneralizedVelocity(), 6, 18);
 }
 
 VectorXd A1::getObservation() {
@@ -267,7 +237,7 @@ VectorXd A1::getObservation() {
     VectorXd obs(com_position.size() + com_velocity.size()+ rpy.size()
     + rpy_rate.size() + joint_angles.size() + joint_velocities.size());
 
-    obs << com_position, com_velocity, rpy, rpy_rate,joint_angles, 
+    obs << com_position, com_velocity, rpy, rpy_rate, joint_angles, 
     joint_velocities;
     
     return obs;
@@ -278,7 +248,7 @@ double A1::getTimeSinceReset() {
 }
 
 MatrixXd A1::computeJacobian(int leg_id) {
-    auto joint_angles = getJointAngles()(seq(3*leg_id, 3*leg_id + 2));
+    VectorXd joint_angles = getJointAngles()(seq(3*leg_id, 3*leg_id + 2));
     return analytical_leg_jacobian(joint_angles, leg_id);
 }
 
@@ -287,14 +257,14 @@ std::map<int,double> A1::mapContactForceToJointTorques(
         
         auto jv = computeJacobian(leg_id);
         VectorXd motor_torques_vec = jv.transpose()*contact_force;
-        std::map<int, double> motor_torques_map;
+        std::map<int, double> motor_torques_dict;
         
-        auto motor_ids = VectorXd::LinSpaced(3, 3*leg_id, 3*leg_id + 2);
-        for (size_t i = 0; i < 3; i++) {
-            motor_torques_map[motor_ids(i)] = motor_torques_vec[i];
+        VectorXd motor_ids = VectorXd::LinSpaced(3, 3*leg_id, 3*leg_id + 2);
+        for (int i = 0; i < 3; i++) {
+            motor_torques_dict[motor_ids(i)] = motor_torques_vec[i];
         }
         
-        return motor_torques_map;
+        return motor_torques_dict;
 }
 
 void A1::step(VectorXd actions) {

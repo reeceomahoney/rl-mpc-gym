@@ -5,19 +5,19 @@ void LocomotionController::reset() {
     time_since_reset = 0;
     gait_generator->reset();
     swing_controller->reset();
-};
+}
 
 void LocomotionController::update() {
     time_since_reset = robot->getTimeSinceReset() - reset_time;
     gait_generator->update(time_since_reset);
     swing_controller->update();
-};
+}
 
 VectorXd LocomotionController::getAction(
     bool mpc_step, std::vector<double> mpc_weights) {
     
     auto swing_action = swing_controller->getAction();
-    
+
     //Only recompute stance action on MPC step
     map<int,double> stance_action;
     if (mpc_step) {
@@ -25,7 +25,7 @@ VectorXd LocomotionController::getAction(
     }
     else {
         stance_action = stance_controller->last_action;
-    };
+    }
     
     VectorXd action(12);
 
@@ -37,8 +37,8 @@ VectorXd LocomotionController::getAction(
         else {
             //stance action
             action[j_id] = stance_action[j_id];
-        };
+        }
     }
-    
+
     return action;
-};
+}

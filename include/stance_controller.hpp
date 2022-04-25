@@ -17,12 +17,6 @@ class StanceController {
     vector<double> body_inertia {0.07335, 0, 0, 0, 0.25068,
         0, 0, 0, 0.25447};
     QPSolverName qp_solver = QPOASES;
-    double tracking_error = 0;
-    vector<double> times;
-    vector<double> solvesx;
-    vector<double> solvesy;
-    vector<double> solvesz;
-
     map<int,double> last_action;
 
 

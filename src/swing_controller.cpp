@@ -114,8 +114,8 @@ map<int,double> SwingController::getAction() {
         for (int j_id = 0; j_id < 3; j_id++) {
             tuple<double,int> angle_and_l_id {joint_angles[j_id], leg_id};
             joint_angles_dict[joint_ids[j_id]] = angle_and_l_id;
-        };
-    };
+        }
+    }
     
     map<int,double> action;
     auto kps = robot->motor_kp;
@@ -129,7 +129,7 @@ map<int,double> SwingController::getAction() {
     for (int j_id = 0; j_id < 12; j_id++) {
         Vector2d state {true_joint_angles[j_id], true_joint_vels[j_id]};
         joint_states_dict[j_id] = state;
-    };
+    }
     
     //Calculate forces using a PD controller
     for (auto &[j_id, angle_and_l_id] : joint_angles_dict) {
@@ -140,7 +140,8 @@ map<int,double> SwingController::getAction() {
                 std::get<0>(angle_and_l_id)))-kds[j_id] * (joint_states_dict[j_id][1]);
             
             action[j_id] = torque;
-        }; 
-    };
+        } 
+    }
+
     return action;
 };

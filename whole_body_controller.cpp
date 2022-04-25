@@ -12,33 +12,26 @@ vector<double> mpc_weights {1, 1, 0, 0, 0, 50, 0, 0, 1, 0.2, 0.2, 0.1, 0};
 
 double sim_freq = 1000;
 int mpc_freq = 50;
-int max_time = 1;
+int max_time = 40;
 
 //Helper function to interpolate velocity commands
 VectorXd interp1d(VectorXd time_points, MatrixXd speed_points, double t) {
-    
-    //Find which two values to interpolate between
     for (int i = 0; i < time_points.size(); i++) {
         if ((t>=time_points[i]) && (t<=time_points[i+1])) {
-            double t1 = time_points[i];
-            double t2 = time_points[i+1];
-            VectorXd v1 = speed_points.row(i);
-            VectorXd v2 = speed_points.row(i+1);
-            
-            return (v2 - v1)*(t - t1) / (t2 - t1) + v1;
+            return speed_points.row(i);
         };
     };
 };
 
 //Creates a speed profile
 VectorXd getCommand(double t) {
-    double vx = 0.8;
-    double vy = 0.5;
-    double wz = 1.5;
+    double vx = 1.5;
+    double vy = 0.75;
+    double wz = 2.0;
 
     VectorXd time_points {{0, 5, 10, 15, 20, 25, 30, 35, 40}};
-    MatrixXd speed_points {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, 
-        {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, 
+    MatrixXd speed_points {{0, 0, 0, 0}, {vx, 0, 0, 0}, {-vx, 0, 0, 0}, 
+        {0, vy, 0, 0}, {0, -vy, 0, 0}, {0, 0, 0, wz}, {0, 0, 0, -wz}, 
         {0, 0, 0, 0}, {0, 0, 0, 0}};
     
     return interp1d(time_points, speed_points, t);
@@ -79,7 +72,7 @@ int main() {
     world.setTimeStep(time_step);
     raisim::RaisimServer server(&world);
     world.addGround();
-    server.launchServer();
+    server.launchServer(8080);
 
     //Create a1 class
     string urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf";
@@ -92,7 +85,7 @@ int main() {
     double desired_twisting_speed = 0;
 
     //Modes: standing, trotting
-    GaitProfile gait_profile("standing");
+    GaitProfile gait_profile("trotting");
 
     GaitGenerator gait_generator(
         gait_profile.stance_duration, 
@@ -136,7 +129,7 @@ int main() {
     auto current_time = start_time;
 
     //Initialise so MPC always calls on the first step
-    auto mpc_count = std::floor(sim_freq / mpc_freq) - 1;
+    int mpc_count = sim_freq / mpc_freq - 1;
     bool mpc_step;
 
     //Main loop
@@ -153,28 +146,21 @@ int main() {
         //Flag to enforce MPC frequency
         mpc_count += 1;
         mpc_step = false;
-        if (mpc_count == std::floor(sim_freq / mpc_freq)) {
+        if (mpc_count == (int(sim_freq) / mpc_freq)) {
             mpc_count = 0;
             mpc_step = true;
         };
-        
+
         //Apply action
         auto hybrid_action = controller.getAction(mpc_step, mpc_weights);
         robot.step(hybrid_action);
         world.integrate();
 
         current_time = robot.getTimeSinceReset();
-        std::this_thread::sleep_for(std::chrono::microseconds(5000));
+        std::this_thread::sleep_for(std::chrono::microseconds(300));
         if (fmod(current_time,5.) == 0.) {    
             cout<<"Time: "<<current_time<<"s"<<endl;
         };
     };
     server.killServer();
-
-    // auto times = controller.stance_controller->times;
-    // plt::named_plot("x", times, controller.stance_controller->solvesx);
-    // plt::named_plot("y", times, controller.stance_controller->solvesy);
-    // plt::named_plot("z", times, controller.stance_controller->solvesz);
-    // plt::legend();
-    // plt::show();
 };

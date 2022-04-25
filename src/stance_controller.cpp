@@ -1,7 +1,6 @@
 #include "stance_controller.hpp"
 
-//Helper functoion to convert Eigen VectorXd type to standard library
-//vectors
+//Helper functoion to convert Eigen VectorXd type to stdl vectors
 vector<double> eigenToStlVec(VectorXd vec) {
     std::vector<double> stl_vec(
         vec.data(), vec.data() + vec.rows() * vec.cols());
@@ -34,14 +33,14 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
     double planning_timestep = 0.025;
 
     ConvexMpc convex_mpc(
-      body_mass,
-      body_inertia,
-      num_legs,
-      planning_horizon_steps,
-      planning_timestep,
-      mpc_weights,
-      1e-5,
-      qp_solver);
+        body_mass,
+        body_inertia,
+        num_legs,
+        planning_horizon_steps,
+        planning_timestep,
+        mpc_weights,
+        1e-5,
+        qp_solver);
 
     //Get desired states
     vector<double> desired_com_position {
@@ -61,7 +60,6 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
         robot->getBaseRollPitchYaw());
     com_roll_pitch_yaw[2] = 0;
 
-    
     vector<double> com_velocity = eigenToStlVec(robot->getComVelocity());
     vector<double> com_angular_velocity = eigenToStlVec(
         robot->getBaseRollPitchYawRate());
@@ -77,25 +75,15 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
       desired_com_position, desired_com_velocity, desired_com_roll_pitch_yaw,
       desired_com_angular_velocity
     );
-    
+
     Eigen::VectorXd predicted_contact_forces = Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(
         predicted_contact_forces_tmp.data(), predicted_contact_forces_tmp.size());
-
-    if (robot->getTimeSinceReset() == 0) {
-        cout<<predicted_contact_forces(seq(0,11))<<endl;
-    }
-
+    
     //Convert forces to joint torques and format as a dictionary
     std::map<int,VectorXd> contact_forces;
     for (int i = 0; i < num_legs; i++) {
         contact_forces[i]= predicted_contact_forces(seq(3*i,3*i + 2));
     }
-
-    // int leg = 0;
-    // times.push_back(robot->getTimeSinceReset());
-    // solvesx.push_back(contact_forces[leg][0]);
-    // solvesy.push_back(contact_forces[leg][1]);
-    // solvesz.push_back(contact_forces[leg][2]);
 
     std::map<int,double>action;
     for (auto &[leg_id, force] : contact_forces) {

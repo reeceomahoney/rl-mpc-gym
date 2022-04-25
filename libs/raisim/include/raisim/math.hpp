@@ -956,7 +956,8 @@ inline void eulerVecToQuat(const Vec<3>& eulerVec, Vec<4>& quat) {
   quat = {cos, sin*axis[0], sin*axis[1], sin*axis[2]};
 }
 
-inline void quatToEulerVec(const double* quat, double* eulerVec) {
+inline void quatToEulerVec(const Vec<4>& quat, Vec<3>& eulerVec) {
+  //const double* quat, double* eulerVec
   const double norm = (std::sqrt(quat[1]*quat[1] + quat[2]*quat[2] + quat[3]*quat[3]));
   if(fabs(norm) < 1e-12) {
     eulerVec[0] = 0;

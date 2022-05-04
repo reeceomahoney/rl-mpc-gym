@@ -64,22 +64,22 @@ VectorXd getCommand_(double t, double vx, double vy, double wz) {
     VectorXd time_points {{0, 5}};
     MatrixXd speed_points {{vx, vy, 0, wz}};
 
-    //Randomly generate mode
-    // int m = std::rand() % 3;
-    // switch (m) {
-    // case 0:
-    //   speed_points(0,1) = 0;
-    //   speed_points(0,3) = 0;
-    //   break;
-    // case 1:
-    //   speed_points(0,0) = 0;
-    //   speed_points(0,3) = 0;
-    //   break;
-    // case 2:
-    //   speed_points(0,0) = 0;
-    //   speed_points(0,1) = 0;
-    //   break;
-    // }
+    // Randomly generate mode
+    int m = std::rand() % 3;
+    switch (m) {
+    case 0:
+      speed_points(0,1) = 0;
+      speed_points(0,3) = 0;
+      break;
+    case 1:
+      speed_points(0,0) = 0;
+      speed_points(0,3) = 0;
+      break;
+    case 2:
+      speed_points(0,0) = 0;
+      speed_points(0,1) = 0;
+      break;
+    }
 
     
 

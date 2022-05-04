@@ -23,6 +23,7 @@ class SwingController {
     double kp = 0.03;
     Vector4d hip_l {-0.08505, 0.08505, -0.08505, 0.08505};
 
+    SwingController(){};
     SwingController(
         A1* _robot,
         GaitGenerator* _gait_generator,

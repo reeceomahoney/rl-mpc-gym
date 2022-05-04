@@ -10,7 +10,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/romahoney/4yp/raisim_mpc/src/mpc_osqp.cc" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/mpc_osqp.cc.o"
   "/home/romahoney/4yp/raisim_mpc/src/stance_controller.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o"
   "/home/romahoney/4yp/raisim_mpc/src/swing_controller.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/src/swing_controller.cpp.o"
-  "/home/romahoney/4yp/raisim_mpc/whole_body_controller.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o"
+  "/home/romahoney/4yp/raisim_mpc/tests/whole_body_controller.cpp" "/home/romahoney/4yp/raisim_mpc/build/CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

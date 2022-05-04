@@ -22,7 +22,7 @@ class GaitGenerator {
 
     Vector4d initial_state_ratio_in_cycle;
 
-    GaitGenerator();
+    GaitGenerator(){};
     GaitGenerator(
         VectorXd _stance_duration, 
         VectorXd _duty_factor,

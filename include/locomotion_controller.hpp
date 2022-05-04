@@ -9,6 +9,7 @@ class LocomotionController {
     double reset_time = robot->getTimeSinceReset();
     double time_since_reset = 0;
 
+    LocomotionController(){};
     LocomotionController(
         A1* _robot,
         GaitGenerator* _gait_generator,
@@ -21,7 +22,7 @@ class LocomotionController {
     stance_controller(_stance_controller) {};
 
     void reset();
-    void update();
+    void update(VectorXd lin_speed, double ang_speed);
     VectorXd getAction(
         bool mpc_step, std::vector<double> mpc_weights);
 };

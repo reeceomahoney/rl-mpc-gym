@@ -25,7 +25,7 @@ include_directories(
 
 #executables
 add_executable(${PROJECT_NAME} 
-    whole_body_controller.cpp 
+    ./tests/whole_body_controller.cpp 
     ./src/a1.cpp
     ./src/gait_generator.cpp
     ./src/stance_controller.cpp

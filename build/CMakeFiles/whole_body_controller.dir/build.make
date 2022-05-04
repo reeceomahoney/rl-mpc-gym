@@ -57,28 +57,28 @@ include CMakeFiles/whole_body_controller.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/whole_body_controller.dir/flags.make
 
-CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o: CMakeFiles/whole_body_controller.dir/flags.make
-CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o: ../whole_body_controller.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/romahoney/4yp/raisim_mpc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o -c /home/romahoney/4yp/raisim_mpc/whole_body_controller.cpp
+CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o: CMakeFiles/whole_body_controller.dir/flags.make
+CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o: ../tests/whole_body_controller.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/romahoney/4yp/raisim_mpc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o -c /home/romahoney/4yp/raisim_mpc/tests/whole_body_controller.cpp
 
-CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/romahoney/4yp/raisim_mpc/whole_body_controller.cpp > CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.i
+CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/romahoney/4yp/raisim_mpc/tests/whole_body_controller.cpp > CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.i
 
-CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/romahoney/4yp/raisim_mpc/whole_body_controller.cpp -o CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.s
+CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/romahoney/4yp/raisim_mpc/tests/whole_body_controller.cpp -o CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.s
 
-CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o.requires:
+CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o.requires:
 
-.PHONY : CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o.requires
+.PHONY : CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o.requires
 
-CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o.provides: CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o.requires
-	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o.provides.build
-.PHONY : CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o.provides
+CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o.provides: CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o.requires
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o.provides.build
+.PHONY : CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o.provides
 
-CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o.provides.build: CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o
+CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o.provides.build: CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o
 
 
 CMakeFiles/whole_body_controller.dir/src/a1.cpp.o: CMakeFiles/whole_body_controller.dir/flags.make
@@ -227,7 +227,7 @@ CMakeFiles/whole_body_controller.dir/src/locomotion_controller.cpp.o.provides.bu
 
 # Object files for target whole_body_controller
 whole_body_controller_OBJECTS = \
-"CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o" \
+"CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o" \
 "CMakeFiles/whole_body_controller.dir/src/a1.cpp.o" \
 "CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o" \
 "CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o" \
@@ -238,7 +238,7 @@ whole_body_controller_OBJECTS = \
 # External object files for target whole_body_controller
 whole_body_controller_EXTERNAL_OBJECTS =
 
-bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o
+bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o
 bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/src/a1.cpp.o
 bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o
 bin/whole_body_controller: CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o
@@ -263,7 +263,7 @@ CMakeFiles/whole_body_controller.dir/build: bin/whole_body_controller
 
 .PHONY : CMakeFiles/whole_body_controller.dir/build
 
-CMakeFiles/whole_body_controller.dir/requires: CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o.requires
+CMakeFiles/whole_body_controller.dir/requires: CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o.requires
 CMakeFiles/whole_body_controller.dir/requires: CMakeFiles/whole_body_controller.dir/src/a1.cpp.o.requires
 CMakeFiles/whole_body_controller.dir/requires: CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o.requires
 CMakeFiles/whole_body_controller.dir/requires: CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o.requires

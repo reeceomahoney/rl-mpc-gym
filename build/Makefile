@@ -285,32 +285,32 @@ src/swing_controller.cpp.s:
 	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/src/swing_controller.cpp.s
 .PHONY : src/swing_controller.cpp.s
 
-whole_body_controller.o: whole_body_controller.cpp.o
+tests/whole_body_controller.o: tests/whole_body_controller.cpp.o
 
-.PHONY : whole_body_controller.o
+.PHONY : tests/whole_body_controller.o
 
 # target to build an object file
-whole_body_controller.cpp.o:
-	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o
-.PHONY : whole_body_controller.cpp.o
+tests/whole_body_controller.cpp.o:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o
+.PHONY : tests/whole_body_controller.cpp.o
 
-whole_body_controller.i: whole_body_controller.cpp.i
+tests/whole_body_controller.i: tests/whole_body_controller.cpp.i
 
-.PHONY : whole_body_controller.i
+.PHONY : tests/whole_body_controller.i
 
 # target to preprocess a source file
-whole_body_controller.cpp.i:
-	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.i
-.PHONY : whole_body_controller.cpp.i
+tests/whole_body_controller.cpp.i:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.i
+.PHONY : tests/whole_body_controller.cpp.i
 
-whole_body_controller.s: whole_body_controller.cpp.s
+tests/whole_body_controller.s: tests/whole_body_controller.cpp.s
 
-.PHONY : whole_body_controller.s
+.PHONY : tests/whole_body_controller.s
 
 # target to generate assembly for a file
-whole_body_controller.cpp.s:
-	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.s
-.PHONY : whole_body_controller.cpp.s
+tests/whole_body_controller.cpp.s:
+	$(MAKE) -f CMakeFiles/whole_body_controller.dir/build.make CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.s
+.PHONY : tests/whole_body_controller.cpp.s
 
 # Help Target
 help:
@@ -339,9 +339,9 @@ help:
 	@echo "... src/swing_controller.o"
 	@echo "... src/swing_controller.i"
 	@echo "... src/swing_controller.s"
-	@echo "... whole_body_controller.o"
-	@echo "... whole_body_controller.i"
-	@echo "... whole_body_controller.s"
+	@echo "... tests/whole_body_controller.o"
+	@echo "... tests/whole_body_controller.i"
+	@echo "... tests/whole_body_controller.s"
 .PHONY : help
 
 

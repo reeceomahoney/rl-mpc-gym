@@ -274,8 +274,9 @@ void A1::step(VectorXd actions) {
     step_counter++;
 }
 
-double A1::getReward() {
-    auto com_velocity = getComVelocity();
-    auto rpy_rate = getBaseRollPitchYaw();
-    //TODO
+double A1::getReward(Vector3d linVel, Vector3d angVel) {
+    Vector3d linVel_d = desired_speed(seq(0,2));
+    Vector3d angVel_d {0, 0, desired_speed(3)};
+
+    return -(linVel-linVel_d).squaredNorm() - (angVel-angVel_d).squaredNorm();
 }

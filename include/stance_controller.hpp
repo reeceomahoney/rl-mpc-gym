@@ -16,10 +16,10 @@ class StanceController {
     vector<double> friction_coeffs{0.45, 0.45, 0.45, 0.45};
     vector<double> body_inertia {0.07335, 0, 0, 0, 0.25068,
         0, 0, 0, 0.25447};
-    QPSolverName qp_solver = QPOASES;
+    QPSolverName qp_solver = OSQP;
     map<int,double> last_action;
 
-
+    StanceController(){};
     StanceController(
         A1* _robot,
         GaitGenerator* _gait_generator,

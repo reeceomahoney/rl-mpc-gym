@@ -2324,7 +2324,7 @@ CMakeFiles/whole_body_controller.dir/src/swing_controller.cpp.o
  /home/romahoney/miniconda3/envs/robots_3.7/include/python3.7m/unicodeobject.h
  /home/romahoney/miniconda3/envs/robots_3.7/include/python3.7m/warnings.h
  /home/romahoney/miniconda3/envs/robots_3.7/include/python3.7m/weakrefobject.h
-CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o
+CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o
  .././include/a1.hpp
  .././include/gait_generator.hpp
  .././include/locomotion_controller.hpp
@@ -2608,7 +2608,6 @@ CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o
  .././libs/eigen3/include/unsupported/Eigen/src/MatrixFunctions/MatrixPower.h
  .././libs/eigen3/include/unsupported/Eigen/src/MatrixFunctions/MatrixSquareRoot.h
  .././libs/eigen3/include/unsupported/Eigen/src/MatrixFunctions/StemFunction.h
- .././libs/matplotlib-cpp/matplotlibcpp.h
  .././libs/osqp/include/constants.h
  .././libs/osqp/include/cs.h
  .././libs/osqp/include/ctrlc.h
@@ -2713,7 +2712,7 @@ CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o
  .././libs/raisim/include/raisim/rayCollision.hpp
  .././libs/raisim/include/tinyxml_rai/tinystr.h
  .././libs/raisim/include/tinyxml_rai/tinyxml_rai.h
- /home/romahoney/4yp/raisim_mpc/whole_body_controller.cpp
+ /home/romahoney/4yp/raisim_mpc/tests/whole_body_controller.cpp
  /home/romahoney/miniconda3/envs/robots_3.7/include/python3.7m/Python.h
  /home/romahoney/miniconda3/envs/robots_3.7/include/python3.7m/abstract.h
  /home/romahoney/miniconda3/envs/robots_3.7/include/python3.7m/bltinmodule.h

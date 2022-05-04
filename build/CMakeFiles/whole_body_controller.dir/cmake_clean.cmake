@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/whole_body_controller.dir/whole_body_controller.cpp.o"
+  "CMakeFiles/whole_body_controller.dir/tests/whole_body_controller.cpp.o"
   "CMakeFiles/whole_body_controller.dir/src/a1.cpp.o"
   "CMakeFiles/whole_body_controller.dir/src/gait_generator.cpp.o"
   "CMakeFiles/whole_body_controller.dir/src/stance_controller.cpp.o"

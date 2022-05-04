@@ -7,14 +7,18 @@ void LocomotionController::reset() {
     swing_controller->reset();
 }
 
-void LocomotionController::update() {
+void LocomotionController::update(VectorXd lin_speed, double ang_speed) {
+    swing_controller->desired_speed = lin_speed;
+    swing_controller->desired_twisting_speed = ang_speed;
+    stance_controller->desired_speed = lin_speed;
+    stance_controller->desired_twisting_speed = ang_speed;
+    
     time_since_reset = robot->getTimeSinceReset() - reset_time;
     gait_generator->update(time_since_reset);
     swing_controller->update();
 }
 
-VectorXd LocomotionController::getAction(
-    bool mpc_step, std::vector<double> mpc_weights) {
+VectorXd LocomotionController::getAction(bool mpc_step, std::vector<double> mpc_weights) {
     
     auto swing_action = swing_controller->getAction();
 

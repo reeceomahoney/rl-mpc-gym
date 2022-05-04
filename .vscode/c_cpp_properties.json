@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/libs/raisim/include",
+                "${workspaceFolder}/tests",
                 "${workspaceFolder}/libs/eigen3/include",
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/libs/osqp/include",

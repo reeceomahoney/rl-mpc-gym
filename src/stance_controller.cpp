@@ -82,7 +82,14 @@ std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights
     //Convert forces to joint torques and format as a dictionary
     std::map<int,VectorXd> contact_forces;
     for (int i = 0; i < num_legs; i++) {
-        contact_forces[i]= predicted_contact_forces(seq(3*i,3*i + 2));
+        VectorXd force = predicted_contact_forces(seq(3*i,3*i + 2));
+        if (abs(force.sum()) > 0.001) {
+            contact_forces[i] = force;
+        }
+        else {
+            //Set small values to zero
+            contact_forces[i] = VectorXd::Zero(3);
+        }
     }
 
     std::map<int,double>action;

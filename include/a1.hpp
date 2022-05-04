@@ -45,7 +45,7 @@ class A1 {
 
     raisim::ArticulatedSystem* model;
 
-    A1();
+    A1(){};
     A1(raisim::ArticulatedSystem* _model, double _time_step);
 
     void reset();
@@ -70,5 +70,5 @@ class A1 {
         int leg_id, VectorXd contact_force);
 
     void step(VectorXd actions);
-    double getReward();
+    double getReward(Vector3d linVel, Vector3d angVel);
 };

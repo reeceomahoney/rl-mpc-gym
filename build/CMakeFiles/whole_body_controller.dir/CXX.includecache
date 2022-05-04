@@ -1498,34 +1498,6 @@ StemFunction.h
 
 .././libs/eigen3/include/unsupported/Eigen/src/MatrixFunctions/StemFunction.h
 
-.././libs/matplotlib-cpp/matplotlibcpp.h
-Python.h
--
-vector
--
-map
--
-array
--
-numeric
--
-algorithm
--
-stdexcept
--
-iostream
--
-cstdint
--
-functional
--
-string
--
-numpy/arrayobject.h
--
-opencv2/opencv.hpp
--
-
 .././libs/osqp/include/constants.h
 
 .././libs/osqp/include/cs.h
@@ -2466,19 +2438,17 @@ stance_controller.hpp
 swing_controller.hpp
 /home/romahoney/4yp/raisim_mpc/src/swing_controller.hpp
 
-/home/romahoney/4yp/raisim_mpc/whole_body_controller.cpp
+/home/romahoney/4yp/raisim_mpc/tests/whole_body_controller.cpp
 locomotion_controller.hpp
-/home/romahoney/4yp/raisim_mpc/locomotion_controller.hpp
+/home/romahoney/4yp/raisim_mpc/tests/locomotion_controller.hpp
 Eigen/Dense
 -
 raisim/World.hpp
-/home/romahoney/4yp/raisim_mpc/raisim/World.hpp
+/home/romahoney/4yp/raisim_mpc/tests/raisim/World.hpp
 raisim/RaisimServer.hpp
-/home/romahoney/4yp/raisim_mpc/raisim/RaisimServer.hpp
+/home/romahoney/4yp/raisim_mpc/tests/raisim/RaisimServer.hpp
 time.h
 -
-matplotlibcpp.h
-/home/romahoney/4yp/raisim_mpc/matplotlibcpp.h
 
 /home/romahoney/miniconda3/envs/robots_3.7/include/python3.7m/Python.h
 patchlevel.h

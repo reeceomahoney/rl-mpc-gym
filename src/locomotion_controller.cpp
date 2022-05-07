@@ -18,14 +18,14 @@ void LocomotionController::update(VectorXd lin_speed, double ang_speed) {
     swing_controller->update();
 }
 
-VectorXd LocomotionController::getAction(bool mpc_step, std::vector<double> mpc_weights) {
+VectorXd LocomotionController::getAction(bool mpc_step, std::vector<double> mpc_weights, double mass, vector<double> inertia) {
     
     auto swing_action = swing_controller->getAction();
 
     //Only recompute stance action on MPC step
     map<int,double> stance_action;
     if (mpc_step) {
-        stance_action = stance_controller->getAction(mpc_weights);
+        stance_action = stance_controller->getAction(mpc_weights, mass, inertia);
     }
     else {
         stance_action = stance_controller->last_action;

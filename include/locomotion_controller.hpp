@@ -24,5 +24,5 @@ class LocomotionController {
     void reset();
     void update(VectorXd lin_speed, double ang_speed);
     VectorXd getAction(
-        bool mpc_step, std::vector<double> mpc_weights);
+        bool mpc_step, std::vector<double> mpc_weights, double mass, vector<double> inertia);
 };

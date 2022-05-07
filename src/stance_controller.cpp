@@ -27,14 +27,15 @@ StanceController::StanceController(
     desired_body_height(_desired_body_height),
     body_mass(_body_mass) {};
 
-std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights) {
+std::map<int,double> StanceController::getAction(std::vector<double> mpc_weights, double mass, vector<double> inertia) {
     //Initialize solver
     int planning_horizon_steps = 10;
     double planning_timestep = 0.025;
+    //vector<double> inertia_vec = {inertia[0], 0, 0, 0, inertia[1], 0, 0, 0, inertia[2]};
 
     ConvexMpc convex_mpc(
-        body_mass,
-        body_inertia,
+        mass,
+        inertia,
         num_legs,
         planning_horizon_steps,
         planning_timestep,

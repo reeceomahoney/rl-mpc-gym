@@ -28,5 +28,5 @@ class StanceController {
         double _desired_body_height,
         double _body_mass);
     
-    std::map<int,double> getAction(std::vector<double> mpc_weights);
+    std::map<int,double> getAction(std::vector<double> mpc_weights, double mass, vector<double> inertia);
 };

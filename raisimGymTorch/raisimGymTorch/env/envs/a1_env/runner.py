@@ -96,7 +96,7 @@ for update in range(1000000):
 
         env.turn_on_visualization()
 
-        for step in range(n_steps*2):
+        for step in range(n_steps):
             frame_start = time.time()
             obs = env.observe(False)
             action_ll = loaded_graph.architecture(torch.from_numpy(obs).cpu())

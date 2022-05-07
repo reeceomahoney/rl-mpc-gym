@@ -11,6 +11,8 @@ using std::map;
 using std::string;
 using std::cout;
 using std::endl;
+using std::unique_ptr;
+using std::make_unique;
 using raisim::Vec;
 using raisim::Mat;
 

@@ -18,7 +18,8 @@ void LocomotionController::update(VectorXd lin_speed, double ang_speed) {
     swing_controller->update();
 }
 
-VectorXd LocomotionController::getAction(bool mpc_step, std::vector<double> mpc_weights, double mass, vector<double> inertia) {
+VectorXd LocomotionController::getAction(bool mpc_step, std::vector<double> mpc_weights,
+    double mass, vector<double> inertia) {
     
     auto swing_action = swing_controller->getAction();
 
@@ -45,4 +46,9 @@ VectorXd LocomotionController::getAction(bool mpc_step, std::vector<double> mpc_
     }
 
     return action;
+}
+
+void LocomotionController::setGaitParameters(VectorXd stance_duraction, VectorXd duty_factor) {
+    gait_generator->stance_duration = stance_duraction;
+    gait_generator->duty_factor = duty_factor;
 }

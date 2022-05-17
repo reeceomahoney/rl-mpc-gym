@@ -20,23 +20,28 @@ VectorXd interp1d(VectorXd time_points, MatrixXd speed_points, double t) {
 
 class GaitProfile {
     public:
-    Vector4d stance_duration, duty_factor, init_leg_phase;
-    Vector4i init_leg_state;
+    Vector4d stance_duration_, duty_factor_, init_leg_phase_;
+    Vector4i init_leg_state_;
     GaitProfile(string gait) {
-        if (gait == "standing") {
-            stance_duration << 0.3, 0.3, 0.3, 0.3;
-            duty_factor << 1, 1, 1, 1;
-            init_leg_phase << 0, 0, 0, 0;
-            init_leg_state << 1, 1, 1, 1;
-        };
-        if (gait == "trotting") {
-            stance_duration << 0.3, 0.3, 0.3, 0.3;
-            duty_factor << 0.6, 0.6, 0.6, 0.6;
-            init_leg_phase << 0.9, 0, 0, 0.9;
-            init_leg_state << 0, 1, 1, 0;
-        };
-    };
+      if (gait == "standing") {
+        stance_duration_ << 0.3, 0.3, 0.3, 0.3;
+        duty_factor_ << 1, 1, 1, 1;
+        init_leg_phase_ << 0, 0, 0, 0;
+        init_leg_state_ << 1, 1, 1, 1;
+        }
+      if (gait == "trotting") {
+        stance_duration_ << 0.3, 0.3, 0.3, 0.3;
+        duty_factor_ << 0.6, 0.6, 0.6, 0.6;
+        init_leg_phase_ << 0.9, 0, 0, 0.9;
+        init_leg_state_ << 0, 1, 1, 0;
+        }
+    }
 };
+
+
+VectorXd clip(VectorXd vec, double min, double max) {
+  return vec.cwiseMax(min).cwiseMin(max);
+}
 
 namespace raisim {
 
@@ -71,30 +76,30 @@ class ENVIRONMENT : public RaisimGymEnv {
     gc_.setZero(gcDim_); gc_init_.setZero(gcDim_);
     gv_.setZero(gvDim_); gv_init_.setZero(gvDim_);
 
-    // initialize velocity commands
     vel_.setZero(4);
-    vx_diff_ = 0.75; vy_diff_ = 0.4; wz_diff_ = 1.0; // Velocity range for random commands
 
     /// nominal configuration
     gc_init_ << 0.0, 0.0, 0.3, 1.0, 0.0, 0.0, 0.0, 0.0, 0.8, -1.6, 0.0, 0.8, -1.6, 0.0, 0.8, -1.6, 0.0, 0.8, -1.6;
 
     /// MUST BE DONE FOR ALL ENVIRONMENTS
-    obDim_ = 37;
-    actionDim_ = 22; actionMean_.setZero(actionDim_); actionStd_.setZero(actionDim_);
+    obDim_ = 74;
+    num_obs_ = 2;
+    actionDim_ = 19; actionMean_.setZero(actionDim_); actionStd_.setZero(actionDim_);
     obDouble_.setZero(obDim_);
+    obPrev_.setZero(obDim_/2);
+    obTemp_.setZero(obDim_/2);
+
+    // ACTION: mpc weights (12), mass (1), inertia tensor (6)
 
     /// action scaling
-    actionMean_ << 1, 1, 0, 0, 0, 50, 0, 0, 1, 0.2, 0.2, 0.1, 
-      12.454, 0.07335, 0, 0, 0, 0.25068, 0, 0, 0, 0.25447;
-    actionStd_ << 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3,
-      0.3, 0.003, 0.003, 0.003, 0.003, 0.03, 0.003,  0.003, 0.003, 0.03;
+    actionMean_ << 1, 1, 0, 0, 0, 50, 0, 0, 1, 0.2, 0.2, 0.1, // mpc
+      12.454, 0.07335, 0, 0, 0.25068, 0, 0.25447; // mass and inertia
+
+    actionStd_ << 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, // mpc
+      0.3, 0.003, 0.003, 0.003, 0.03, 0.003, 0.03; // mass and inertia
 
     /// Reward coefficients
     rewards_.initializeFromConfigurationFile(cfg["reward"]);
-
-    /// indices of links that should not make contact with ground
-    footIndices_.insert(9); footIndices_.insert(12); 
-    footIndices_.insert(15); footIndices_.insert(18);
 
     /// visualize if it is the first environment
     if (visualizable_) {
@@ -114,7 +119,7 @@ class ENVIRONMENT : public RaisimGymEnv {
 
   float step(const Eigen::Ref<EigenVec>& action) final {
     //Update the controller parameters. Set vel_rand to true for random commands
-    generateCommand(robot_->getTimeSinceReset(), true);
+    generateCommand(robot_->getTimeSinceReset(), false);
     controller_->update(vel_(seq(0,2)), vel_(3));
     
     //Store for reward calculation
@@ -132,22 +137,23 @@ class ENVIRONMENT : public RaisimGymEnv {
     }
     
     // MPC weights
-    std::vector<double> mpc_weights_(action_.head(12).data(), 
+    std::vector<double> mpc_weights (action_.head(12).data(), 
       action_.head(12).data() + action_.head(12).rows() * action_.head(12).cols());
-    mpc_weights_.push_back(0.);
+    mpc_weights.push_back(0.);
 
     // Dynamic parameters
-    mass_ = action_(12);
-    std::vector<double> inertia_(action_.tail(9).data(), 
-      action_.tail(9).data() + action_.tail(9).rows() * action_.tail(9).cols());
+    double mass = action_(12);
+    VectorXd interita_tmp = action_(seq(13,18));
+    std::vector<double> inertia (interita_tmp.data(), 
+      interita_tmp.data() + interita_tmp.rows() * interita_tmp.cols());
 
     // Send action, the first being an mpc step and the rest just regular steps
-    for(int i=0; i< int(control_dt_ / simulation_dt_ + 1e-10); i++){
+    for(int i=0; i< int(control_dt_ / simulation_dt_ + 1e-10); i++) {
       mpc_step = false;
       if (i==0) mpc_step = true;
-      
-      hybrid_action_ = controller_->getAction(mpc_step, mpc_weights_, mass_, inertia_);
-      hybrid_action_ = hybrid_action_.cwiseMin(33.25).cwiseMax(-33.25);    //Clip torques
+
+      hybrid_action_ = controller_->getAction(mpc_step, mpc_weights, mass, inertia);
+      hybrid_action_ = clip(hybrid_action_, -33.35, 33.25);   //Clip torques
       robot_->step(hybrid_action_);
       
       if(server_) server_->lockVisualizationServerMutex();
@@ -159,13 +165,14 @@ class ENVIRONMENT : public RaisimGymEnv {
     if (obDouble_.hasNaN()) {
       cout<<"Observation is nan, reseting state"<<endl;
       model_->setState(gc_init_, gv_init_);
-      updateObservation();
+      for(int i=0; i<num_obs_; i++) updateObservation();
     }
 
     double torque_norm = hybrid_action_.squaredNorm();
     if (isnan(torque_norm)) torque_norm = 0;
     rewards_.record("torque", torque_norm);
     rewards_.record("error", robot_->getReward(bodyLinearVel_, bodyAngularVel_));
+    rewards_.record("survival", 1);
 
     return rewards_.sum();
   }
@@ -179,12 +186,14 @@ class ENVIRONMENT : public RaisimGymEnv {
     bodyLinearVel_ = rot.e().transpose() * gv_.segment(0, 3);
     bodyAngularVel_ = rot.e().transpose() * gv_.segment(3, 3);
 
-    obDouble_ << vel_[0], vel_[1], vel_[3], // velocity commands
+    obTemp_ << vel_[0], vel_[1], vel_[3], // velocity commands
          gc_[2], // body height
         rot.e().row(2).transpose(), // body orientation
         gc_.tail(12), // joint angles
         bodyLinearVel_, bodyAngularVel_, // body linear & angular velocity
         gv_.tail(12); // joint velocity
+    obDouble_ << obTemp_, obPrev_;
+    obPrev_ = obTemp_;
   }
 
   void observe(Eigen::Ref<EigenVec> ob) final {
@@ -216,25 +225,25 @@ class ENVIRONMENT : public RaisimGymEnv {
 
   void setupController(string gait) {
     
-    Vector3d vel_ {0, 0, 0};
+    Vector3d vel_d {0, 0, 0};
     double desired_twisting_speed = 0;
 
     // Standing or trotting
     GaitProfile gait_profile(gait);
 
-    gait_generator_ = make_unique<GaitGenerator>(gait_profile.stance_duration, gait_profile.duty_factor, 
-        gait_profile.init_leg_state, gait_profile.init_leg_phase);
+    gait_generator_ = make_unique<GaitGenerator>(gait_profile.stance_duration_, gait_profile.duty_factor_, 
+        gait_profile.init_leg_state_, gait_profile.init_leg_phase_);
 
-    sw_controller_ = make_unique<SwingController>(robot_.get(), gait_generator_.get(), vel_, desired_twisting_speed, 
+    sw_controller_ = make_unique<SwingController>(robot_.get(), gait_generator_.get(), vel_d, desired_twisting_speed, 
         robot_->mpc_body_height, 0.01);
 
-    st_controller_ = make_unique<StanceController>(robot_.get(), gait_generator_.get(), vel_, desired_twisting_speed,
+    st_controller_ = make_unique<StanceController>(robot_.get(), gait_generator_.get(), vel_d, desired_twisting_speed,
         robot_->mpc_body_height, robot_->mpc_body_mass);
 
     controller_ = make_unique<LocomotionController>(robot_.get(), gait_generator_.get(), sw_controller_.get(), st_controller_.get());
-}
+  }
 
-void generateCommand(double t, bool vel_rand) {
+  void generateCommand(double t, bool vel_rand) {
   if (vel_rand == true) {
     if (std::fmod(t,1) == 0.) {
       vel_.setZero(4);
@@ -242,23 +251,23 @@ void generateCommand(double t, bool vel_rand) {
       //Randomly generate command
       int m = std::rand() % 6;
       switch (m) {
-        case 0: vel_[0] = double((std::rand() % int(vx_diff_*100)))/100 + 1.5; // vx (1.5 - 2.25)
+        case 0: vel_[0] = double(std::rand() % 225)/100; // vx (0 - 2.25)
           break;
-        case 1: vel_[0] = -(double((std::rand() % int(vx_diff_*100)))/100 + 1.5);
+        case 1: vel_[0] = -double(std::rand() % 225)/100;
           break;
-        case 2: vel_[1] = double((std::rand() % int(vy_diff_*100)))/100 + 0.75; // vy (0.75 - 1.15)
+        case 2: vel_[1] = double(std::rand() % 115)/100; // vy (0 - 1.15)
           break;
-        case 3: vel_[1] = -(double((std::rand() % int(vy_diff_*100)))/100 + 0.75);
+        case 3: vel_[1] = -double(std::rand() % 115)/100;
           break;
-        case 4: vel_[3] = double((std::rand() % int(wz_diff_*100)))/10 + 2; // wz (2 - 3)
+        case 4: vel_[3] = double(std::rand() % 300)/100; // wz (0 - 3)
           break;
-        case 5: vel_[3] = -(double((std::rand() % int(wz_diff_*100)))/10 + 2);
+        case 5: vel_[3] = -double(std::rand() % 300)/100;
           break;
       }
     }   
   }
   else {
-    double vx = 1.0; double vy = 0.6; double wz = 1.5;
+    double vx = 1.5; double vy = 0.75; double wz = 2.0;
 
     VectorXd time_points {{0, 3, 6, 9, 12, 15, 18}};
     MatrixXd speed_points {{vx, 0, 0, 0}, {-vx, 0, 0, 0},{0, vy, 0, 0},
@@ -269,9 +278,7 @@ void generateCommand(double t, bool vel_rand) {
 }
 
  private:
-  int gcDim_, gvDim_, nJoints_;
-  double mass_;
-  vector<double> mpc_weights_, inertia_;
+  int gcDim_, gvDim_, nJoints_, num_obs_;
   bool mpc_step;
 
   unique_ptr<GaitGenerator> gait_generator_;
@@ -282,10 +289,9 @@ void generateCommand(double t, bool vel_rand) {
   bool visualizable_ = false;
   raisim::ArticulatedSystem* model_;
   unique_ptr<A1> robot_;
-  Eigen::VectorXd gc_init_, gv_init_, gc_, gv_, action_, hybrid_action_;
-  double terminalRewardCoeff_ = -10., vx_diff_, vy_diff_, wz_diff_;
-  Eigen::VectorXd obDouble_, actionMean_, actionStd_, vel_;
-  Eigen::Vector3d bodyLinearVel_, bodyAngularVel_;
-  std::set<size_t> footIndices_;
+  VectorXd gc_init_, gv_init_, gc_, gv_, action_, hybrid_action_;
+  double terminalRewardCoeff_ = -10.;
+  VectorXd obDouble_, obPrev_, obTemp_, actionMean_, actionStd_, vel_;
+  Vector3d bodyLinearVel_, bodyAngularVel_;
 };
 }

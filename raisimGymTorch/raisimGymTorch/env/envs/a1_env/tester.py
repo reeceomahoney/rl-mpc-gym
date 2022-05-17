@@ -58,7 +58,7 @@ else:
     max_steps = n_steps*15 ## 10 secs
 
     for step in range(max_steps):
-        time.sleep(0.1)
+        time.sleep(0.01)
         obs = env.observe(False)
         action_ll = loaded_graph.architecture(torch.from_numpy(obs).cpu())
         reward_ll, dones = env.step(action_ll.cpu().detach().numpy())

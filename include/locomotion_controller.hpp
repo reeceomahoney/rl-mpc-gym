@@ -25,4 +25,5 @@ class LocomotionController {
     void update(VectorXd lin_speed, double ang_speed);
     VectorXd getAction(
         bool mpc_step, std::vector<double> mpc_weights, double mass, vector<double> inertia);
+    void setGaitParameters(VectorXd stance_duraction, VectorXd duty_factor);
 };

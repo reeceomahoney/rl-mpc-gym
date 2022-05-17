@@ -2,13 +2,12 @@
 #include <Eigen/Dense>
 #include "raisim/World.hpp"
 #include "raisim/RaisimServer.hpp"
-
 #include <time.h>
-//#include "matplotlibcpp.h"
 
-//namespace plt = matplotlibcpp;
 
 vector<double> mpc_weights {1, 1, 0, 0, 0, 50, 0, 0, 1, 0.2, 0.2, 0.1, 0};
+vector<double> inertia = {0.07335, 0, 0, 0, 0.25068, 0, 0, 0, 0.25447};
+double mass = 12.454;
 
 double sim_freq = 1000;
 int mpc_freq = 50;
@@ -47,35 +46,28 @@ class GaitProfile {
     };
 };
 
-// LocomotionController setupController(A1 &robot_, GaitGenerator &gg, SwingController &sw, StanceController &st,
-//     string gait) {
+LocomotionController setupController(A1* robot_, GaitGenerator* gg, SwingController* sw, StanceController* st,
+    string gait) {
     
-//     Vector3d desired_speed {0, 0, 0};
-//     double desired_twisting_speed = 0;
+    Vector3d desired_speed {0, 0, 0};
+    double desired_twisting_speed = 0;
 
-//     // Standing or trotting
-//     GaitProfile gait_profile(gait);
+    // Standing or trotting
+    GaitProfile gait_profile(gait);
 
-//     gg = GaitGenerator(gait_profile.stance_duration, gait_profile.duty_factor, 
-//         gait_profile.init_leg_state, gait_profile.init_leg_phase);
+    *gg = GaitGenerator(gait_profile.stance_duration, gait_profile.duty_factor, 
+        gait_profile.init_leg_state, gait_profile.init_leg_phase);
     
-//     SwingController sw(robot_, gg, desired_speed, desired_twisting_speed, 
-//         robot_.mpc_body_height, 0.01);
+    *sw = SwingController(robot_, gg, desired_speed, desired_twisting_speed, 
+        robot_->mpc_body_height, 0.01);
 
-//     st = StanceController(robot_, gg, desired_speed, desired_twisting_speed,
-//         robot_.mpc_body_height, robot_.mpc_body_mass);
+    *st = StanceController(robot_, gg, desired_speed, desired_twisting_speed,
+        robot_->mpc_body_height, robot_->mpc_body_mass);
 
-//     LocomotionController controller(robot_, gg, sw, st);
+    LocomotionController controller(robot_, gg, sw, st);
 
-//     return controller;
-// }
-
-// void updateController(LocomotionController& controller, VectorXd lin_speed, double ang_speed) {
-//         controller->swing_controller.desired_speed = lin_speed;
-//         controller->swing_controller.desired_twisting_speed = ang_speed;
-//         controller->stance_controller.desired_speed = lin_speed;
-//         controller->stance_controller.desired_twisting_speed = ang_speed;
-// };
+    return controller;
+}
 
 //Creates a speed profile
 VectorXd getCommand(double t) {
@@ -90,61 +82,59 @@ VectorXd getCommand(double t) {
     return interp1d(time_points, speed_points, t);
 };
 
-// int main() {
-//     //Construct simulator
-//     raisim::World world;
-//     double time_step = 1/sim_freq;
-//     world.setTimeStep(time_step);
-//     raisim::RaisimServer server(&world);
-//     world.addGround();
-//     server.launchServer(8080);
+int main() {
+    //Construct simulator
+    raisim::World world;
+    double time_step = 1/sim_freq;
+    world.setTimeStep(time_step);
+    raisim::RaisimServer server(&world);
+    world.addGround();
+    server.launchServer(8080);
 
-//     //Create a1 class
-//     string urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf";
-//     auto model = world.addArticulatedSystem(urdf_path);
-//     A1 robot(model, time_step);
+    //Create a1 class
+    string urdf_path = "/home/romahoney/4yp/raisim_mpc/a1_data/urdf/a1.urdf";
+    auto model = world.addArticulatedSystem(urdf_path);
+    A1 robot(model, time_step);
     
-//     //Setup controller
-//     auto controller = setupController(&robot, &gait_generator, &sw_controller, &st_controller,
-//         "trotting");
-//     controller.reset();
+    //Setup controller
+    auto controller = setupController(&robot, &gait_generator, &sw_controller, &st_controller, "trotting");
+    controller.reset();
     
-//     auto start_time = robot.getTimeSinceReset();
-//     auto current_time = start_time;
+    auto start_time = robot.getTimeSinceReset();
+    auto current_time = start_time;
 
-//     //Initialise so MPC always calls on the first step
-//     int mpc_count = sim_freq / mpc_freq - 1;
-//     bool mpc_step;
+    //Initialise so MPC always calls on the first step
+    int mpc_count = sim_freq / mpc_freq - 1;
+    bool mpc_step;
 
-//     //Main loop
-//     while ((current_time - start_time) < max_time) {
+    //Main loop
+    while ((current_time - start_time) < max_time) {
         
-//         //Update the controller parameters.
-//         auto desired_speed = getCommand(current_time);
-//         updateController(&controller, desired_speed(seq(0,2)), desired_speed(3));
-//         controller.update();
+        //Update the controller parameters.
+        auto desired_speed = getCommand(current_time);
+        controller.update(desired_speed(seq(0,2)), desired_speed(3));
 
-//         //Store desired speed for reward function calcuation
-//         robot.desired_speed = desired_speed;
+        //Store desired speed for reward function calcuation
+        robot.desired_speed = desired_speed;
 
-//         //Flag to enforce MPC frequency
-//         mpc_count += 1;
-//         mpc_step = false;
-//         if (mpc_count == (int(sim_freq) / mpc_freq)) {
-//             mpc_count = 0;
-//             mpc_step = true;
-//         };
+        //Flag to enforce MPC frequency
+        mpc_count += 1;
+        mpc_step = false;
+        if (mpc_count == (int(sim_freq) / mpc_freq)) {
+            mpc_count = 0;
+            mpc_step = true;
+        }
 
-//         //Apply action
-//         auto hybrid_action = controller.getAction(mpc_step, mpc_weights);
-//         robot.step(hybrid_action);
-//         world.integrate();
+        //Apply action
+        auto hybrid_action = controller.getAction(mpc_step, mpc_weights, mass, inertia);
+        robot.step(hybrid_action);
+        world.integrate();
 
-//         current_time = robot.getTimeSinceReset();
-//         std::this_thread::sleep_for(std::chrono::microseconds(300));
-//         if (fmod(current_time,5.) == 0.) {    
-//             cout<<"Time: "<<current_time<<"s"<<endl;
-//         };
-//     };
-//     server.killServer();
-// };
+        current_time = robot.getTimeSinceReset();
+        std::this_thread::sleep_for(std::chrono::microseconds(300));
+        if (fmod(current_time,5.) == 0.) {    
+            cout<<"Time: "<<current_time<<"s"<<endl;
+        };
+    };
+    server.killServer();
+};

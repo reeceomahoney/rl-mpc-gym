@@ -98,7 +98,7 @@ map<int,double> SwingController::getAction() {
         VectorXd hip_l_vec {{0, hip_l[leg_id], 0}};
         VectorXd foot_target_position = (
             hip_horizontal_velocity *
-            gait_generator->stance_duration[leg_id] / 2 + kp *
+            gait_generator->stance_duration[leg_id] / 2 + kp_ *
             (target_hip_horizontal_velocity - hip_horizontal_velocity)
             ) - desired_height + hip_l_vec;
 

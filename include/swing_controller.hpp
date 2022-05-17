@@ -20,7 +20,7 @@ class SwingController {
     map<int,tuple<double,int>> joint_angles_dict;
     MatrixXd phase_switch_local_foot_pos;
 
-    double kp = 0.03;
+    double kp_ = 0.03;
     Vector4d hip_l {-0.08505, 0.08505, -0.08505, 0.08505};
 
     SwingController(){};
